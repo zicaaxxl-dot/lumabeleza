@@ -1,6 +1,6 @@
 services:
   - type: web
     name: lumabeleza
-    runtime: static
-    buildCommand: echo static
-    staticPublishPath: .
+    runtime: node
+    buildCommand: npm install
+    startCommand: node server.js
