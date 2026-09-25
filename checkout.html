@@ -9,63 +9,70 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="checkout-page">
-  <header class="ck-top">
+  <header class="vega-head">
     <a class="logo" href="index.html" aria-label="Luma Beleza">
       <span class="script" style="font-size:28px">luma</span>
       <span class="word" style="font-size:16px">beleza</span>
     </a>
-    <div class="ck-secure">🔒 Compra segura</div>
+    <div class="ck-secure">🔒 Pagamento 100% seguro</div>
   </header>
 
-  <div class="ck-banner">
-    <img src="images/checkout/basecheckout.jpg" alt="Entrega garantida em até 7 dias úteis. Promoção exclusiva apenas hoje.">
-  </div>
+  <main class="vega">
+    <img class="vega-banner" src="images/checkout/basecheckout.jpg" alt="Entrega garantida em até 7 dias úteis. Promoção exclusiva apenas hoje.">
 
-  <main class="ck-wrap">
     <form id="checkout">
-      <section class="ck-card">
-        <h2><span class="step-n">1</span> Identificação</h2>
-        <div class="field"><label for="nome">Nome completo</label><input id="nome" name="nome" autocomplete="name" required></div>
-        <div class="field"><label for="email">E-mail</label><input id="email" name="email" type="email" autocomplete="email" required></div>
-        <div class="grid-2">
-          <div class="field"><label for="telefone">Celular</label><input id="telefone" name="telefone" inputmode="tel" autocomplete="tel" required></div>
-          <div class="field"><label for="cpf">CPF</label><input id="cpf" name="cpf" inputmode="numeric" required></div>
-        </div>
+      <section class="vega-box" id="summary"></section>
+
+      <section class="vega-box">
+        <h2>Identificação</h2>
+        <div class="field"><label for="nome">Nome completo</label><input id="nome" name="nome" autocomplete="name" placeholder="Seu nome e sobrenome" required></div>
+        <div class="field"><label for="email">E-mail</label><input id="email" name="email" type="email" autocomplete="email" placeholder="seu@email.com" required></div>
+        <div class="field"><label for="telefone">Celular</label><input id="telefone" name="telefone" inputmode="tel" autocomplete="tel" placeholder="(00) 00000-0000" required></div>
+        <div class="field"><label for="cpf">CPF</label><input id="cpf" name="cpf" inputmode="numeric" placeholder="000.000.000-00" required></div>
         <p class="error" id="err-id"></p>
       </section>
 
-      <section class="ck-card">
-        <h2><span class="step-n">2</span> Entrega</h2>
-        <div class="field"><label for="cep">CEP</label><input id="cep" name="cep" inputmode="numeric" autocomplete="postal-code" required></div>
+      <section class="vega-box">
+        <h2>Entrega</h2>
+        <div class="cep-row">
+          <div class="field"><label for="cep">CEP</label><input id="cep" name="cep" inputmode="numeric" autocomplete="postal-code" placeholder="00000-000" required></div>
+          <button class="cta" type="button" id="buscar-cep">BUSCAR</button>
+        </div>
         <div class="field"><label for="rua">Endereço</label><input id="rua" name="rua" autocomplete="address-line1" required></div>
         <div class="grid-2">
           <div class="field"><label for="numero">Número</label><input id="numero" name="numero" required></div>
-          <div class="field"><label for="complemento">Complemento</label><input id="complemento" name="complemento"></div>
+          <div class="field"><label for="complemento">Complemento</label><input id="complemento" name="complemento" placeholder="Apto, bloco"></div>
         </div>
         <div class="field"><label for="bairro">Bairro</label><input id="bairro" name="bairro" required></div>
         <div class="grid-2">
           <div class="field"><label for="cidade">Cidade</label><input id="cidade" name="cidade" required></div>
-          <div class="field"><label for="uf">UF</label><input id="uf" name="uf" maxlength="2" required></div>
+          <div class="field"><label for="uf">Estado</label><input id="uf" name="uf" maxlength="2" placeholder="UF" required></div>
         </div>
-        <div class="pay-opt active">
-          <input type="radio" checked disabled>
-          <div><strong>Frete grátis</strong><div class="muted">Correios · até 7 dias úteis · R$ 0,00</div></div>
+        <div class="ship-row">
+          <img class="correios" src="images/ui/correios.svg" alt="Correios">
+          <div class="grow">
+            <strong>Frete grátis</strong>
+            <span class="muted">Correios · até 7 dias úteis</span>
+          </div>
+          <strong>R$ 0,00</strong>
         </div>
         <p class="error" id="err-addr"></p>
       </section>
 
-      <section class="ck-card">
-        <h2><span class="step-n">3</span> Pagamento</h2>
+      <section class="vega-box">
+        <h2>Pagamento</h2>
         <label class="pay-opt active">
           <input type="radio" name="pagamento" value="pix" checked>
+          <img class="pay-ico" src="images/ui/pix.svg" alt="">
           <div>
             <strong>PIX</strong>
-            <div class="muted">Aprovação na hora</div>
-            <div class="pay-body">O código do pedido aparece na próxima tela para você concluir o pagamento.</div>
+            <div class="muted">Aprovação imediata</div>
+            <div class="pay-body">O código do pedido aparece na próxima tela.</div>
           </div>
         </label>
         <label class="pay-opt">
           <input type="radio" name="pagamento" value="cartao">
+          <img class="pay-ico" src="images/ui/visa.svg" alt="">
           <div>
             <strong>Cartão de crédito</strong>
             <div class="muted">Em até 10x</div>
@@ -82,19 +89,27 @@
         </label>
         <label class="pay-opt">
           <input type="radio" name="pagamento" value="boleto">
+          <img class="pay-ico" src="images/ui/elo.svg" alt="">
           <div>
             <strong>Boleto</strong>
             <div class="muted">Compensação em 1 a 2 dias úteis</div>
-            <div class="pay-body">O boleto é enviado para o e-mail informado depois da confirmação do pedido.</div>
+            <div class="pay-body">As instruções seguem para o e-mail informado.</div>
           </div>
         </label>
         <p class="error" id="err-pay"></p>
+        <button class="cta block" type="submit" id="finish">FINALIZAR COMPRA</button>
       </section>
-
-      <section class="ck-card" id="summary"></section>
-      <button class="cta block" type="submit" id="finish">FINALIZAR PEDIDO</button>
-      <p class="muted" style="text-align:center;margin-top:10px">Ambiente seguro · Frete grátis para todo o Brasil</p>
     </form>
+
+    <div class="vega-brands">
+      <img src="images/ui/mastercard.svg" alt="Mastercard">
+      <img src="images/ui/visa.svg" alt="Visa">
+      <img src="images/ui/elo.svg" alt="Elo">
+      <img src="images/ui/amex.svg" alt="American Express">
+      <img src="images/ui/diners.svg" alt="Diners">
+      <img src="images/ui/pix.svg" alt="Pix">
+    </div>
+    <p class="muted" style="text-align:center;margin:10px 12px 0">Ambiente seguro · Frete grátis para todo o Brasil</p>
   </main>
   <script src="js/store.js"></script>
   <script src="js/checkout.js"></script>

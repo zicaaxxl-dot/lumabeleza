@@ -518,7 +518,52 @@ button { cursor: pointer; }
   font-size: 14px;
 }
 
-.checkout-page { background: #f4f5f7; min-height: 100vh; }
+.checkout-page { background: #eef1f4; min-height: 100vh; padding-bottom: 28px; }
+.vega-head {
+  background: #fff;
+  border-bottom: 1px solid #e6e6e6;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+}
+.vega-head .ck-secure { color: #128a3e; font-size: 13px; font-weight: 800; }
+.vega {
+  max-width: 560px;
+  margin: 0 auto;
+}
+.vega-banner { width: 100%; display: block; background: #fff; }
+.vega-box {
+  background: #fff;
+  margin: 12px 12px 0;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 16px;
+}
+.vega-box h2 { margin: 0 0 14px; font-size: 16px; font-weight: 800; }
+.vega .field input { border-radius: 6px; border-color: #d0d5dd; background: #fff; }
+.cep-row { display: grid; grid-template-columns: 1fr 92px; gap: 8px; align-items: end; }
+.cep-row .cta { height: 46px; }
+.ship-row {
+  margin-top: 8px;
+  border: 2px solid var(--btn);
+  border-radius: 8px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #fff8f4;
+}
+.ship-row .correios { width: 42px; height: 42px; }
+.ship-row .grow { flex: 1; }
+.ship-row strong { display: block; }
+.pay-opt { align-items: flex-start; }
+.pay-ico { width: 36px; height: 24px; object-fit: contain; flex: 0 0 36px; }
+.pay-opt .pay-body { width: 100%; }
+.vega-total { font-size: 22px; font-weight: 800; }
+.vega-brands { display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; margin: 12px 12px 0; }
+.vega-brands img { width: 38px; height: 26px; object-fit: contain; }
 .ck-top {
   background: #fff;
   border-bottom: 1px solid var(--line);

@@ -10,14 +10,16 @@ const draft = readOrder() || {
 
 function renderSummary() {
   const total = draft.price * draft.qty;
+  const old = draft.oldPrice * draft.qty;
   document.querySelector("#summary").innerHTML = `
-    <h2><span class="step-n">4</span> Resumo</h2>
+    <h2>Resumo do pedido</h2>
     <div class="summary-item">
       <img src="${draft.image}" alt="${draft.product}">
       <div>
         <strong>${draft.product}</strong>
-        <div class="muted">${draft.tone} · Qtd ${draft.qty}</div>
-        <div>${money(total)}</div>
+        <div class="muted">${draft.tone} · Quantidade ${draft.qty}</div>
+        <div class="muted" style="text-decoration:line-through">${money(old)}</div>
+        <div class="vega-total">${money(total)}</div>
       </div>
     </div>
     <div class="totals">
@@ -26,6 +28,30 @@ function renderSummary() {
       <div class="grand"><span>Total</span><span>${money(total)}</span></div>
     </div>
   `;
+}
+
+async function buscarCep() {
+  const cep = onlyDigits(document.querySelector("#cep").value);
+  if (cep.length !== 8) {
+    document.querySelector("#err-addr").textContent = "Informe um CEP com 8 números.";
+    return;
+  }
+  try {
+    const res = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+    const data = await res.json();
+    if (data.erro) {
+      document.querySelector("#err-addr").textContent = "CEP não encontrado.";
+      return;
+    }
+    document.querySelector("#err-addr").textContent = "";
+    document.querySelector("#rua").value = data.logradouro || "";
+    document.querySelector("#bairro").value = data.bairro || "";
+    document.querySelector("#cidade").value = data.localidade || "";
+    document.querySelector("#uf").value = data.uf || "";
+    document.querySelector("#numero").focus();
+  } catch {
+    toast("Não foi possível buscar o CEP");
+  }
 }
 
 function selectedPay() {
@@ -48,22 +74,11 @@ document.querySelector("#telefone").addEventListener("input", (event) => {
 document.querySelector("#cpf").addEventListener("input", (event) => {
   event.target.value = maskCpf(event.target.value);
 });
-document.querySelector("#cep").addEventListener("input", async (event) => {
+document.querySelector("#cep").addEventListener("input", (event) => {
   event.target.value = maskCep(event.target.value);
-  const cep = onlyDigits(event.target.value);
-  if (cep.length !== 8) return;
-  try {
-    const res = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
-    const data = await res.json();
-    if (data.erro) return;
-    document.querySelector("#rua").value = data.logradouro || "";
-    document.querySelector("#bairro").value = data.bairro || "";
-    document.querySelector("#cidade").value = data.localidade || "";
-    document.querySelector("#uf").value = data.uf || "";
-  } catch {
-    toast("Não foi possível buscar o CEP");
-  }
+  if (onlyDigits(event.target.value).length === 8) buscarCep();
 });
+document.querySelector("#buscar-cep").onclick = buscarCep;
 
 document.querySelector("#checkout").onsubmit = (event) => {
   event.preventDefault();
