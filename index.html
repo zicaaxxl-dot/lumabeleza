@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Base com Refil + Pincel Mágico e Rímel – Luma Beleza</title>
+  <meta name="description" content="Base com refil, pincel mágico e rímel. A base que se adapta ao tom da pele. Frete grátis para todo o Brasil.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Great+Vibes&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="topbar"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 8l-9-5-9 5v8l9 5 9-5V8z"/><path d="M3.3 7.5L12 12l8.7-4.5M12 12v9"/></svg> Frete grátis para todo o Brasil</div>
+  <header class="header">
+    <div class="header-row">
+      <button class="icon-btn" id="open-menu" aria-label="Menu">☰</button>
+      <button class="icon-btn" id="open-search" aria-label="Pesquisa">⌕</button>
+      <a class="logo" href="index.html" aria-label="Luma Beleza">
+        <span class="script">luma</span>
+        <span class="word">beleza</span>
+      </a>
+      <button class="icon-btn cart-btn" id="open-cart" aria-label="Carrinho">
+        <span class="cart-count" data-n="0"></span>
+        🛒
+      </button>
+    </div>
+  </header>
+
+  <nav class="crumb"><a href="index.html">Início</a> / <a href="index.html">Todos os produtos</a></nav>
+
+  <main class="product">
+    <section class="gallery">
+      <div class="stage">
+        <span class="discount">-40%</span>
+        <img id="stage-img" alt="">
+      </div>
+      <div class="thumbs" id="thumbs"></div>
+    </section>
+
+    <section class="buy">
+      <div class="trust-row">
+        <div><span>🛡</span>COMPRA SEGURA</div>
+        <div><span>🚚</span>ENTREGA EM ATÉ 7 DIAS ÚTEIS</div>
+        <div><span>★</span>PRODUTO ORIGINAL</div>
+        <div><span>●●●●</span>EXCELENTES AVALIAÇÕES</div>
+      </div>
+      <span class="flash">OFERTAS RELÂMPAGO</span>
+      <h1>Base com Refil + Pincel Mágico e Rímel</h1>
+      <div class="rule"></div>
+      <div class="price-row">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="1.6" aria-hidden="true"><path d="M4 7h11l5 5-5 5H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2z"/><circle cx="8" cy="12" r="1.2" fill="#888"/></svg>
+        <span class="old" id="old-price"></span>
+        <span class="now" id="price"></span>
+      </div>
+      <p class="installments" id="installments"></p>
+      <p class="label">Tom</p>
+      <div class="tones" id="tones"></div>
+      <div class="actions">
+        <div class="qty">
+          <button type="button" id="minus" aria-label="Diminuir">−</button>
+          <input id="qty" type="number" min="1" max="5" value="1" aria-label="Quantidade">
+          <button type="button" id="plus" aria-label="Aumentar">+</button>
+        </div>
+        <button class="cta" type="button" data-buy>COMPRAR AGORA</button>
+      </div>
+      <div class="cards">
+        <div class="card-icons">
+          <img class="brand" src="images/ui/mastercard.svg" alt="Mastercard">
+          <img class="brand" src="images/ui/visa.svg" alt="Visa">
+          <img class="brand" src="images/ui/elo.svg" alt="Elo">
+          <img class="brand" src="images/ui/amex.svg" alt="American Express">
+          <img class="brand" src="images/ui/diners.svg" alt="Diners">
+          <img class="brand" src="images/ui/pix.svg" alt="Pix">
+        </div>
+        <p>PARCELE SUAS COMPRAS NAS MELHORES BANDEIRAS</p>
+      </div>
+      <div class="guarantees">
+        <div class="guarantee"><img class="seal" src="images/ui/selo-1.svg" alt=""><div><strong>Compra garantida:</strong> você tem até 30 dias de garantia</div></div>
+        <div class="guarantee"><img class="seal" src="images/ui/selo-2.svg" alt=""><div><strong>Troca grátis:</strong> você tem até 7 dias para testar o produto</div></div>
+        <div class="guarantee ship">
+          <img class="correios" src="images/ui/correios.svg" alt="Correios">
+          <div><strong>Frete grátis:</strong> para todo o Brasil<br>Entrega garantida em até 7 dias úteis</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="sales">
+    <h2 class="desc-title desc-wrap">DESCRIÇÃO</h2>
+    <section class="landing desc-wrap" id="descricao">
+      <img src="images/landing/01.jpg" alt="Esconda manchas, melasma e rugas em segundos">
+      <img src="images/landing/02.jpg" alt="Kit base com refil, pincel mágico e rímel">
+      <img src="images/landing/03.png" alt="Detalhes da base">
+      <img src="images/landing/04.png" alt="Como a base se adapta à pele">
+      <img src="images/landing/05.png" alt="Brindes do kit">
+      <img src="images/landing/06.png" alt="Antes e depois">
+      <img src="images/landing/07.png" alt="Oferta da base">
+    </section>
+    </div>
+
+    <section class="reviews desc-wrap" id="avaliacoes">
+      <div class="score"><span>4.9</span> <span class="stars">★★★★★</span> <span>20 avaliações</span></div>
+      <button class="cta block" type="button" id="open-review">FAÇA SUA AVALIAÇÃO</button>
+      <div id="review-list"></div>
+      <button class="more-reviews" type="button" id="more-reviews">Ver todas as avaliações</button>
+    </section>
+
+    <section class="extra desc-wrap">
+      <h2 class="info-title">INFORMAÇÃO ADICIONAL</h2>
+      <p>Tons disponíveis:</p>
+      <ul class="tones-list" id="extra-tones"></ul>
+      <p>Conteúdo: base cushion com refil, pincel mágico e rímel. A base se adapta ao tom da pele conforme o uso.</p>
+    </section>
+  </main>
+
+  <section class="footer-perks">
+    <div class="perk"><span>📦</span><div><strong>Frete grátis</strong><p>Receba seu pedido no conforto da sua casa com entrega garantida e segurada pelos Correios.</p></div></div>
+    <div class="perk"><span>🛒</span><div><strong>Pedido monitorado</strong><p>Acompanhe seu pedido do envio à entrega com total transparência e segurança.</p></div></div>
+    <div class="perk"><span>🎧</span><div><strong>Precisa de atendimento?</strong><p>Entre em contato via WhatsApp ou e-mail.</p></div></div>
+    <div class="perk"><span>🔒</span><div><strong>Compra segura</strong><p>Compra 100% segura em um ambiente protegido.</p></div></div>
+  </section>
+
+  <section class="newsletter">
+    <div>✉</div>
+    <h3>Receba ofertas exclusivas por e-mail!</h3>
+    <form id="news">
+      <input type="email" required placeholder="Digite seu e-mail" aria-label="E-mail">
+      <button class="cta" type="submit">CADASTRAR</button>
+    </form>
+  </section>
+
+  <footer class="foot">
+    <div class="foot-grid">
+      <button class="acc" type="button">ATENDIMENTO AO CLIENTE +</button>
+      <div class="acc-panel">
+        <p>Horário: seg. a sáb., 8h às 18h</p>
+        <p>E-mail: contato@lumabeleza.com</p>
+        <a href="#" id="foot-wa">WhatsApp</a>
+      </div>
+      <button class="acc" type="button">TERMOS E POLÍTICA +</button>
+      <div class="acc-panel">
+        <a href="politicas.html#privacidade">Política de privacidade</a>
+        <a href="politicas.html#reembolso">Política de reembolso</a>
+        <a href="politicas.html#envio">Política de envio</a>
+        <a href="politicas.html#termos">Termos de serviço</a>
+      </div>
+      <button class="acc" type="button">INFORMAÇÕES +</button>
+      <div class="acc-panel">
+        <a href="politicas.html#contato">Contato</a>
+        <a href="politicas.html#rastreio">Rastrear pedido</a>
+        <a href="index.html">Quem somos</a>
+      </div>
+      <h3>Segurança e qualidade</h3>
+      <div class="pay-row sec-row">
+        <img src="images/ui/envio-1.png" alt="Selo de segurança">
+        <img src="images/ui/envio-2.png" alt="Selo de qualidade">
+        <img src="images/ui/envio-3.png" alt="Selo de compra segura">
+      </div>
+      <h3>Nós aceitamos</h3>
+      <div class="pay-row">
+        <img class="brand" src="images/ui/mastercard.svg" alt="Mastercard">
+        <img class="brand" src="images/ui/visa.svg" alt="Visa">
+        <img class="brand" src="images/ui/elo.svg" alt="Elo">
+        <img class="brand" src="images/ui/amex.svg" alt="American Express">
+        <img class="brand" src="images/ui/diners.svg" alt="Diners">
+        <img class="brand" src="images/ui/pix.svg" alt="Pix">
+      </div>
+      <h3>Formas de envio</h3>
+      <div class="pay-row"><img class="correios" src="images/ui/correios.svg" alt="Correios"></div>
+      <p class="legal">© Luma Beleza. Entrega para todo o Brasil.</p>
+    </div>
+  </footer>
+
+  <button class="wa" id="wa" aria-label="Falar no WhatsApp">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2C6.58 2 2.15 6.4 2.15 11.83c0 1.74.46 3.44 1.34 4.94L2 22l5.39-1.4a10 10 0 0 0 4.65 1.18h.01c5.46 0 9.89-4.4 9.89-9.83C21.94 6.4 17.5 2 12.04 2zm5.76 14.05c-.24.68-1.4 1.3-1.94 1.38-.5.07-1.12.1-1.81-.11-.41-.13-.95-.31-1.63-.6-2.87-1.24-4.74-4.13-4.88-4.32-.14-.19-1.16-1.54-1.16-2.94s.73-2.08 1-2.37c.24-.27.64-.4 1.02-.4.12 0 .23 0 .33.01.3.01.45.03.65.5.24.58.82 2 .89 2.15.07.14.12.32.02.51-.09.19-.14.31-.28.48-.14.16-.29.36-.42.48-.14.13-.29.28-.12.54.16.26.73 1.2 1.57 1.95 1.08.96 1.99 1.26 2.27 1.4.28.14.44.12.6-.07.17-.19.7-.81.88-1.09.19-.27.37-.23.62-.14.26.1 1.62.76 1.9.9.28.14.46.21.53.32.07.13.07.74-.17 1.42z"/></svg>
+  </button>
+
+  <div class="drawer" id="menu">
+    <div class="panel">
+      <button class="close-x" data-close aria-label="Fechar">×</button>
+      <h2>Menu</h2>
+      <nav class="menu">
+        <a href="index.html">Início</a>
+        <a href="#descricao">Descrição</a>
+        <a href="#avaliacoes">Avaliações</a>
+        <a href="politicas.html">Políticas</a>
+      </nav>
+    </div>
+  </div>
+  <div class="drawer" id="search">
+    <div class="panel">
+      <button class="close-x" data-close aria-label="Fechar">×</button>
+      <h2>Pesquisar</h2>
+      <form id="search-form">
+        <input class="search-input" id="q" placeholder="Pesquisar por:" aria-label="Pesquisar por">
+      </form>
+    </div>
+  </div>
+  <div class="drawer" id="cart">
+    <div class="panel right">
+      <button class="close-x" data-close aria-label="Fechar">×</button>
+      <h2>Carrinho</h2>
+      <p>Seu carrinho está vazio. Escolha o tom e toque em comprar agora.</p>
+      <button class="cta block" type="button" data-buy>COMPRAR AGORA</button>
+    </div>
+  </div>
+  <div class="modal" id="review-modal">
+    <div class="modal-card">
+      <button class="close-x" data-close aria-label="Fechar">×</button>
+      <h2>Faça sua avaliação</h2>
+      <form id="review-form">
+        <div class="field"><label for="rname">Nome</label><input id="rname" name="name" required></div>
+        <div class="field"><label for="rstars">Nota</label>
+          <select id="rstars" name="stars"><option value="5">5 estrelas</option><option value="4">4 estrelas</option><option value="3">3 estrelas</option></select>
+        </div>
+        <div class="field"><label for="rtext">Comentário</label><textarea id="rtext" name="text" required></textarea></div>
+        <button class="cta block" type="submit">PUBLICAR</button>
+      </form>
+    </div>
+  </div>
+  <div class="buybar">
+    <button class="cta block" type="button" data-buy>COMPRAR AGORA</button>
+  </div>
+  <div class="toast" role="status"></div>
+  <script src="js/store.js"></script>
+  <script src="js/product.js"></script>
+  <script>document.querySelector("#foot-wa").onclick = (e) => { e.preventDefault(); openWhatsApp(); };</script>
+</body>
+</html>

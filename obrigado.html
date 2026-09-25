@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pedido recebido – Luma Beleza</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Great+Vibes&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="checkout-page">
+  <header class="ck-top">
+    <a class="logo" href="index.html"><span class="script" style="font-size:28px">luma</span><span class="word" style="font-size:16px">beleza</span></a>
+    <div class="ck-secure">🔒 Compra segura</div>
+  </header>
+  <main class="ck-wrap">
+    <section class="thanks" id="thanks"></section>
+  </main>
+  <script src="js/store.js"></script>
+  <script>
+    const order = readOrder();
+    const box = document.querySelector("#thanks");
+    if (!order || !order.id) {
+      box.innerHTML = `<h1>Nenhum pedido encontrado</h1><p><a href="index.html">Voltar à loja</a></p>`;
+    } else {
+      const pay = { pix: "PIX", cartao: "Cartão de crédito", boleto: "Boleto" }[order.pagamento] || order.pagamento;
+      const addr = order.endereco;
+      box.innerHTML = `
+        <div class="ok-banner">Pedido ${order.id} registrado</div>
+        <h1 style="margin-top:0">Obrigada, ${order.nome.split(" ")[0]}</h1>
+        <p>Seu kit <strong>${order.product}</strong> (${order.tone}) está reservado. Total ${money(order.total)} com frete grátis.</p>
+        ${order.pagamento === "pix" ? `
+          <p><strong>Pagamento via PIX</strong></p>
+          <div class="qr" role="img" aria-label="Referência visual do pedido"></div>
+          <p class="muted">Código do pedido</p>
+          <div class="code" id="code">${order.id}</div>
+          <button class="cta block" type="button" id="copy" style="margin-top:10px">COPIAR CÓDIGO</button>
+          <p class="muted">Este código identifica o pedido nesta loja. O PIX bancário entra quando a conta de recebimento estiver ligada.</p>
+        ` : `<p>Forma de pagamento: <strong>${pay}</strong>. ${order.pagamento === "boleto" ? "As instruções seguem para o e-mail informado." : "O pagamento fica em análise e os dados do cartão não foram salvos."}</p>`}
+        <p>Entrega em <strong>${addr.rua}, ${addr.numero}${addr.complemento ? " · " + addr.complemento : ""} — ${addr.bairro}, ${addr.cidade}/${addr.uf}</strong>, CEP ${addr.cep}.</p>
+        <p class="muted">Prazo de até 7 dias úteis após a confirmação.</p>
+        <a class="cta block" href="index.html" style="display:grid;place-items:center;margin-top:12px">VOLTAR À LOJA</a>
+      `;
+      const copy = document.querySelector("#copy");
+      if (copy) copy.onclick = async () => {
+        await navigator.clipboard.writeText(order.id);
+        toast("Código copiado");
+      };
+    }
+  </script>
+</body>
+</html>
