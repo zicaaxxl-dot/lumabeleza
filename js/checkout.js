@@ -19,7 +19,7 @@ const PROOF = [
 
 function renderProof() {
   document.querySelector("#ck-proof").innerHTML = `
-    <h2>Avaliações de clientes <span>★★★★★ 4,9</span></h2>
+    <h2>Avaliações de clientes <span>★★★★★ 4,9 · 538</span></h2>
     <div class="ck-reviews">
       ${PROOF.map((review) => `
         <article class="ck-review">
