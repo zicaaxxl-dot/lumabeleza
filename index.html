@@ -7,9 +7,9 @@
   <meta name="description" content="Base com refil, pincel mágico e rímel. A base que se adapta ao tom da pele. Frete grátis para todo o Brasil.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Great+Vibes&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <link rel="preload" as="image" href="images/carrossel/01.jpg" fetchpriority="high">
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="preload" as="image" href="images/carrossel/01.jpg?v=3" fetchpriority="high">
+  <link rel="stylesheet" href="css/style.css?v=3">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Great+Vibes&family=Nunito:wght@400;600;700;800&display=swap" media="print" onload="this.media='all'">
 </head>
 <body>
   <div class="topbar"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 8l-9-5-9 5v8l9 5 9-5V8z"/><path d="M3.3 7.5L12 12l8.7-4.5M12 12v9"/></svg> Frete grátis para todo o Brasil</div>
@@ -34,12 +34,25 @@
     <section class="gallery">
       <div class="stage">
         <span class="discount">-40%</span>
-        <img id="stage-img" src="images/carrossel/01.jpg" alt="Base com refil, pincel mágico e rímel" width="1000" height="1333" fetchpriority="high" decoding="async">
+        <img id="stage-img" src="images/carrossel/01.jpg?v=3" alt="Base com refil, pincel mágico e rímel" width="720" height="960" fetchpriority="high" decoding="async">
       </div>
-      <div class="thumbs" id="thumbs"></div>
+      <div class="thumbs" id="thumbs">
+        <button type="button" class="active" data-slide="0"><img src="images/thumbs/01.jpg?v=3" alt="Foto 1 do produto" width="128" height="171" decoding="async"></button>
+        <button type="button" data-slide="1"><img src="images/thumbs/02.jpg?v=3" alt="Foto 2 do produto" width="128" height="171" decoding="async"></button>
+        <button type="button" data-slide="2"><img src="images/thumbs/03.jpg?v=3" alt="Foto 3 do produto" width="128" height="171" decoding="async"></button>
+        <button type="button" data-slide="3"><img src="images/thumbs/04.jpg?v=3" alt="Foto 4 do produto" width="128" height="171" decoding="async"></button>
+        <button type="button" data-slide="4"><img src="images/thumbs/05.jpg?v=3" alt="Foto 5 do produto" width="128" height="171" decoding="async"></button>
+        <button type="button" data-slide="5"><img src="images/thumbs/06.jpg?v=3" alt="Foto 6 do produto" width="128" height="171" decoding="async"></button>
+      </div>
     </section>
 
     <section class="buy" id="comprar">
+      <div class="trust-row">
+        <div><span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z"/><path d="M9 12l2 2 4-4"/></svg></span>COMPRA SEGURA</div>
+        <div><span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 7h11v8H3z"/><path d="M14 10h4l3 3v2h-7z"/><circle cx="7" cy="18" r="1.6"/><circle cx="18" cy="18" r="1.6"/></svg></span>ENTREGA EM ATÉ 7 DIAS ÚTEIS</div>
+        <div><span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l2.2 6.4H21l-5.4 4 2 6.6L12 16.8 6.4 20l2-6.6L3 9.4h6.8z"/></svg></span>PRODUTO ORIGINAL</div>
+        <div><span><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3l2.1 4.4 4.9.7-3.5 3.4.8 4.8L12 14.8 7.7 16.3l.8-4.8L5 8.1l4.9-.7z"/></svg></span>4,9 EM AVALIAÇÕES</div>
+      </div>
       <span class="flash">OFERTAS RELÂMPAGO</span>
       <h1>Base com Refil + Pincel Mágico e Rímel</h1>
       <div class="rule"></div>
@@ -71,17 +84,25 @@
         </div>
         <p>PARCELE SUAS COMPRAS NAS MELHORES BANDEIRAS</p>
       </div>
+      <div class="guarantees">
+        <div class="guarantee"><img class="seal" src="images/ui/selo-1.svg" alt=""><div><strong>Compra garantida:</strong> você tem até 30 dias de garantia</div></div>
+        <div class="guarantee"><img class="seal" src="images/ui/selo-2.svg" alt=""><div><strong>Troca grátis:</strong> você tem até 7 dias para testar o produto</div></div>
+        <div class="guarantee ship">
+          <img class="correios" src="images/ui/correios.svg" alt="Correios">
+          <div><strong>Frete grátis:</strong> para todo o Brasil<br>Entrega garantida em até 7 dias úteis</div>
+        </div>
+      </div>
     </section>
 
     <div class="sales">
     <h2 class="desc-title desc-wrap">DESCRIÇÃO</h2>
     <section class="landing desc-wrap" id="descricao">
-      <img src="images/landing/02.jpg" alt="Kit base com refil, pincel mágico e rímel" width="882" height="1784" loading="lazy" decoding="async">
-      <img src="images/landing/03.jpg" alt="Detalhes da base" width="376" height="1101" loading="lazy" decoding="async">
-      <img src="images/landing/04.jpg" alt="Como a base se adapta à pele" width="376" height="1101" loading="lazy" decoding="async">
-      <img src="images/landing/05.jpg" alt="Brindes do kit" width="376" height="1101" loading="lazy" decoding="async">
-      <img src="images/landing/06.jpg" alt="Antes e depois" width="376" height="1101" loading="lazy" decoding="async">
-      <img src="images/landing/07.jpg" alt="Oferta da base" width="376" height="1101" loading="lazy" decoding="async">
+      <img src="images/landing/02.jpg?v=3" alt="Kit base com refil, pincel mágico e rímel" width="720" height="1456" loading="lazy" decoding="async">
+      <img src="images/landing/03.jpg?v=3" alt="Detalhes da base" width="376" height="1101" loading="lazy" decoding="async">
+      <img src="images/landing/04.jpg?v=3" alt="Como a base se adapta à pele" width="376" height="1101" loading="lazy" decoding="async">
+      <img src="images/landing/05.jpg?v=3" alt="Brindes do kit" width="376" height="1101" loading="lazy" decoding="async">
+      <img src="images/landing/06.jpg?v=3" alt="Antes e depois" width="376" height="1101" loading="lazy" decoding="async">
+      <img src="images/landing/07.jpg?v=3" alt="Oferta da base" width="376" height="1101" loading="lazy" decoding="async">
     </section>
     </div>
 
@@ -99,6 +120,13 @@
       <p>Conteúdo: base cushion com refil, pincel mágico e rímel. A base se adapta ao tom da pele conforme o uso.</p>
     </section>
   </main>
+
+  <section class="footer-perks">
+    <div class="perk"><span><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 7h11v8H3z"/><path d="M14 10h4l3 3v2h-7z"/><circle cx="7" cy="18" r="1.5"/><circle cx="18" cy="18" r="1.5"/></svg></span><div><strong>Frete grátis</strong><p>Entrega pelos Correios para todo o Brasil, em até 7 dias úteis.</p></div></div>
+    <div class="perk"><span><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 7h16v12H4z"/><path d="M8 7V5h8v2"/><path d="M8 13h8"/></svg></span><div><strong>Pedido monitorado</strong><p>Você acompanha o envio do pedido até a entrega.</p></div></div>
+    <div class="perk"><span><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 6h14v9H7l-2 3V6z"/></svg></span><div><strong>Atendimento</strong><p>Fale com a loja pelo WhatsApp ou pelo e-mail.</p></div></div>
+    <div class="perk"><span><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z"/></svg></span><div><strong>Compra segura</strong><p>Seus dados de pagamento não ficam salvos nesta loja.</p></div></div>
+  </section>
 
   <section class="newsletter">
     <h3>Receba ofertas exclusivas por e-mail!</h3>
@@ -195,8 +223,8 @@
     <button class="cta block" type="button" data-buy>COMPRAR AGORA</button>
   </div>
   <div class="toast" role="status"></div>
-  <script src="js/store.js"></script>
-  <script src="js/product.js"></script>
+  <script src="js/store.js?v=3"></script>
+  <script src="js/product.js?v=3"></script>
   <script>document.querySelector("#foot-wa").onclick = (e) => { e.preventDefault(); openWhatsApp(); };</script>
 </body>
 </html>

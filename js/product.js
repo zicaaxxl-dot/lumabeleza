@@ -30,12 +30,13 @@ function slides() {
   return [GALLERY[0], tone.image, ...GALLERY.slice(1)];
 }
 
-let thumbKey = "";
+let thumbKey = GALLERY.join("|");
 
 function renderGallery() {
   const list = slides();
   const stage = document.querySelector("#stage-img");
-  if (stage.getAttribute("src") !== list[state.slide]) stage.src = list[state.slide];
+  const next = list[state.slide];
+  if ((stage.getAttribute("src") || "").split("?")[0] !== next) stage.src = next + ASSET;
   stage.alt = STORE.product;
   const thumbs = document.querySelector("#thumbs");
   const key = list.join("|");
@@ -43,7 +44,7 @@ function renderGallery() {
     thumbKey = key;
     thumbs.innerHTML = list.map((src, index) => `
       <button type="button" class="${index === state.slide ? "active" : ""}" data-slide="${index}">
-        <img src="${src}" alt="Foto ${index + 1} do produto" width="144" height="192" decoding="async">
+        <img src="${(THUMBS[src] || src) + ASSET}" alt="Foto ${index + 1} do produto" width="128" height="171" decoding="async">
       </button>
     `).join("");
   }

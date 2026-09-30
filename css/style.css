@@ -21,7 +21,7 @@
 html { scroll-behavior: smooth; }
 body {
   margin: 0;
-  font-family: "Nunito", sans-serif;
+  font-family: "Nunito", "Segoe UI", sans-serif;
   color: var(--ink);
   background: var(--bg);
   line-height: 1.45;
@@ -128,7 +128,7 @@ button { cursor: pointer; }
 .stage img {
   width: 100%;
   height: auto;
-  aspect-ratio: 1000 / 1333;
+  aspect-ratio: 720 / 960;
   object-fit: contain;
   position: static;
   background: #f7f3ec;
@@ -180,7 +180,7 @@ button { cursor: pointer; }
   color: #6a4e22;
   line-height: 1.2;
 }
-.trust-row span { display: block; font-size: 18px; margin-bottom: 2px; }
+.trust-row span { display: flex; justify-content: center; margin-bottom: 4px; color: #8a6840; }
 
 .buy { padding: 6px 16px 8px; }
 .flash {
@@ -206,7 +206,7 @@ button { cursor: pointer; }
   text-decoration: line-through;
   font-size: 20px;
 }
-.price-row .now { font-size: 28px; font-weight: 800; color: #8a6840; }
+.price-row .now { font-size: 34px; font-weight: 800; color: #1a1612; letter-spacing: -0.5px; }
 .installments { margin: 2px 0 14px; color: #333; font-size: 15px; }
 .label { font-size: 15px; margin: 8px 0; }
 .tones { display: flex; flex-wrap: wrap; gap: 8px; }

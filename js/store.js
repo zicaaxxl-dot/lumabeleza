@@ -22,6 +22,20 @@ const GALLERY = [
   "images/carrossel/06.jpg",
 ];
 
+const THUMBS = {
+  "images/carrossel/01.jpg": "images/thumbs/01.jpg",
+  "images/carrossel/02.jpg": "images/thumbs/02.jpg",
+  "images/carrossel/03.jpg": "images/thumbs/03.jpg",
+  "images/carrossel/04.jpg": "images/thumbs/04.jpg",
+  "images/carrossel/05.jpg": "images/thumbs/05.jpg",
+  "images/carrossel/06.jpg": "images/thumbs/06.jpg",
+  "images/seletor/claro.jpg": "images/thumbs/claro.jpg",
+  "images/seletor/medio.jpg": "images/thumbs/medio.jpg",
+  "images/seletor/escuro.jpg": "images/thumbs/escuro.jpg",
+};
+
+const ASSET = "?v=3";
+
 function money(value) {
   return value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 }

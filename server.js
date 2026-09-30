@@ -1,6 +1,7 @@
 const http = require("http");
 const fs = require("fs");
 const path = require("path");
+const zlib = require("zlib");
 
 const root = path.resolve(__dirname);
 const port = Number(process.env.PORT) || 10000;
@@ -34,21 +35,33 @@ const server = http.createServer((req, res) => {
       return;
     }
     const ext = path.extname(file).toLowerCase();
-    const image = [".jpg", ".jpeg", ".png", ".svg", ".webp", ".ico"].includes(ext);
-    const cache = image ? "public, max-age=2592000" : "no-cache";
+    const image = [".jpg", ".jpeg", ".png", ".webp", ".ico"].includes(ext);
+    const text = [".html", ".css", ".js", ".svg", ".txt"].includes(ext);
+    const cache = image || ext === ".css" || ext === ".js" || ext === ".svg"
+      ? "public, max-age=2592000"
+      : "no-cache";
     const etag = `W/"${stat.size}-${Math.round(stat.mtimeMs)}"`;
     if (req.headers["if-none-match"] === etag) {
       res.writeHead(304, { ETag: etag, "Cache-Control": cache });
       res.end();
       return;
     }
-    res.writeHead(200, {
+    const headers = {
       "Content-Type": types[ext] || "application/octet-stream",
-      "Content-Length": stat.size,
       ETag: etag,
       "Last-Modified": stat.mtime.toUTCString(),
       "Cache-Control": cache,
-    });
+      Vary: "Accept-Encoding",
+    };
+    const gzip = text && /\bgzip\b/.test(req.headers["accept-encoding"] || "");
+    if (gzip) {
+      headers["Content-Encoding"] = "gzip";
+      res.writeHead(200, headers);
+      fs.createReadStream(file).pipe(zlib.createGzip({ level: 6 })).pipe(res);
+      return;
+    }
+    headers["Content-Length"] = stat.size;
+    res.writeHead(200, headers);
     fs.createReadStream(file).pipe(res);
   });
 });

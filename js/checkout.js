@@ -14,7 +14,7 @@ function renderSummary() {
   document.querySelector("#summary").innerHTML = `
     <h2>Resumo do pedido</h2>
     <div class="sum-top">
-      <img src="${draft.image}" alt="${draft.product}">
+      <img src="${String(draft.image).split("?")[0]}${ASSET}" alt="${draft.product}">
       <div>
         <strong>${draft.product}</strong>
         <span class="tone-chip">${draft.tone} · ${draft.qty} un.</span>
