@@ -24,7 +24,7 @@
       <section class="vega-box" id="summary"></section>
 
       <section class="vega-box">
-        <h2>Identificação</h2>
+        <h2><span class="vstep">1</span> Identificação</h2>
         <div class="field"><label for="nome">Nome completo</label><input id="nome" name="nome" autocomplete="name" placeholder="Seu nome e sobrenome" required></div>
         <div class="field"><label for="email">E-mail</label><input id="email" name="email" type="email" autocomplete="email" placeholder="seu@email.com" required></div>
         <div class="field"><label for="telefone">Celular</label><input id="telefone" name="telefone" inputmode="tel" autocomplete="tel" placeholder="(00) 00000-0000" required></div>
@@ -33,7 +33,7 @@
       </section>
 
       <section class="vega-box">
-        <h2>Entrega</h2>
+        <h2><span class="vstep">2</span> Entrega</h2>
         <div class="cep-row">
           <div class="field"><label for="cep">CEP</label><input id="cep" name="cep" inputmode="numeric" autocomplete="postal-code" placeholder="00000-000" required></div>
           <button class="cta" type="button" id="buscar-cep">BUSCAR</button>
@@ -60,23 +60,19 @@
       </section>
 
       <section class="vega-box">
-        <h2>Pagamento</h2>
+        <h2><span class="vstep">3</span> Pagamento</h2>
         <label class="pay-opt active">
           <input type="radio" name="pagamento" value="pix" checked>
           <img class="pay-ico" src="images/ui/pix.svg" alt="">
-          <div>
-            <strong>PIX</strong>
-            <div class="muted">Aprovação imediata</div>
-            <div class="pay-body">O código do pedido aparece na próxima tela.</div>
-          </div>
+          <span class="pay-copy"><strong>PIX</strong><small>Aprovação imediata</small></span>
+          <span class="pay-tag">Na hora</span>
+          <div class="pay-body">O código do pedido aparece na próxima tela.</div>
         </label>
         <label class="pay-opt">
           <input type="radio" name="pagamento" value="cartao">
-          <img class="pay-ico" src="images/ui/visa.svg" alt="">
-          <div>
-            <strong>Cartão de crédito</strong>
-            <div class="muted">Em até 10x</div>
-            <div class="pay-body">
+          <img class="pay-ico" src="images/ui/mastercard.svg" alt="">
+          <span class="pay-copy"><strong>Cartão de crédito</strong><small>Em até 10x</small></span>
+          <div class="pay-body">
               <div class="field"><label for="cartao">Número do cartão</label><input id="cartao" inputmode="numeric" autocomplete="cc-number" placeholder="0000 0000 0000 0000"></div>
               <div class="field"><label for="nome-cartao">Nome impresso</label><input id="nome-cartao" autocomplete="cc-name"></div>
               <div class="grid-2">
@@ -85,16 +81,12 @@
               </div>
               <p class="muted">Os dados do cartão ficam só nesta tela e não são salvos.</p>
             </div>
-          </div>
         </label>
         <label class="pay-opt">
           <input type="radio" name="pagamento" value="boleto">
           <img class="pay-ico" src="images/ui/elo.svg" alt="">
-          <div>
-            <strong>Boleto</strong>
-            <div class="muted">Compensação em 1 a 2 dias úteis</div>
-            <div class="pay-body">As instruções seguem para o e-mail informado.</div>
-          </div>
+          <span class="pay-copy"><strong>Boleto</strong><small>Compensação em 1 a 2 dias úteis</small></span>
+          <div class="pay-body">As instruções seguem para o e-mail informado.</div>
         </label>
         <p class="error" id="err-pay"></p>
         <button class="cta block" type="submit" id="finish">FINALIZAR COMPRA</button>
@@ -109,7 +101,7 @@
       <img src="images/ui/diners.svg" alt="Diners">
       <img src="images/ui/pix.svg" alt="Pix">
     </div>
-    <p class="muted" style="text-align:center;margin:10px 12px 0">Ambiente seguro · Frete grátis para todo o Brasil</p>
+    <p class="vega-safe">Ambiente seguro · Frete grátis para todo o Brasil</p>
   </main>
   <script src="js/store.js"></script>
   <script src="js/checkout.js"></script>

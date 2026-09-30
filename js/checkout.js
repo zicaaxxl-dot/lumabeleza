@@ -13,17 +13,16 @@ function renderSummary() {
   const old = draft.oldPrice * draft.qty;
   document.querySelector("#summary").innerHTML = `
     <h2>Resumo do pedido</h2>
-    <div class="summary-item">
+    <div class="sum-top">
       <img src="${draft.image}" alt="${draft.product}">
       <div>
         <strong>${draft.product}</strong>
-        <div class="muted">${draft.tone} · Quantidade ${draft.qty}</div>
-        <div class="muted" style="text-decoration:line-through">${money(old)}</div>
-        <div class="vega-total">${money(total)}</div>
+        <span class="tone-chip">${draft.tone} · ${draft.qty} un.</span>
       </div>
+      <div class="vega-total"><s>${money(old)}</s>${money(total)}</div>
     </div>
     <div class="totals">
-      <div><span>Subtotal</span><span>${money(total)}</span></div>
+      <div><span>Produtos</span><span>${money(total)}</span></div>
       <div><span>Frete</span><span>Grátis</span></div>
       <div class="grand"><span>Total</span><span>${money(total)}</span></div>
     </div>
