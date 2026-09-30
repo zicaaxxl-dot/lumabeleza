@@ -22,7 +22,7 @@ const REVIEWS = [
 ];
 
 const COLORS = ["#c45c8a", "#7b5ea7", "#3d8b7a", "#bf5d30", "#3b6ea5", "#b08968", "#8a5a44"];
-const state = { tone: TONES[0].id, qty: 1, slide: 0, shown: 6, tonePicked: false };
+const state = { tone: null, qty: 1, slide: 0, shown: 6, tonePicked: false, pendingBuy: false };
 
 function slides() {
   const tone = TONES.find((item) => item.id === state.tone);
@@ -61,7 +61,23 @@ function renderReviews() {
   document.querySelector("#more-reviews").style.display = state.shown >= REVIEWS.length ? "none" : "block";
 }
 
+function focusTones() {
+  if (document.activeElement) document.activeElement.blur();
+  const box = document.querySelector("#tones");
+  box.classList.add("need-pick");
+  document.querySelector("#tone-hint").textContent = "Escolha um tom para continuar a compra.";
+  const label = document.querySelector("#tom-label");
+  const top = label.getBoundingClientRect().top + window.scrollY - 78;
+  window.scrollTo({ top: Math.max(0, top), behavior: "auto" });
+  toast("Escolha o tom da base");
+}
+
 function goCheckout() {
+  if (!state.tonePicked) {
+    state.pendingBuy = true;
+    focusTones();
+    return;
+  }
   const tone = TONES.find((item) => item.id === state.tone);
   saveOrder({
     product: STORE.product,
@@ -128,9 +144,8 @@ function bindChrome() {
 
 document.querySelector("#old-price").textContent = money(STORE.oldPrice);
 document.querySelector("#price").textContent = money(STORE.price);
-document.querySelector("#installments").textContent = `Em até 10x de ${money(STORE.price / 10)}`;
 document.querySelector("#tones").innerHTML = TONES.map((tone) => `
-  <button type="button" class="tone ${tone.id === state.tone ? "active" : ""}" data-tone="${tone.id}">${tone.label}</button>
+  <button type="button" class="tone" data-tone="${tone.id}">${tone.label}</button>
 `).join("");
 document.querySelector("#extra-tones").innerHTML = TONES.map((tone) => `<li>${tone.label} — ${tone.hint}</li>`).join("");
 
@@ -140,8 +155,14 @@ document.querySelector("#tones").onclick = (event) => {
   state.tone = btn.dataset.tone;
   state.tonePicked = true;
   state.slide = 1;
+  document.querySelector("#tones").classList.remove("need-pick");
+  document.querySelector("#tone-hint").textContent = "Tom selecionado.";
   document.querySelectorAll(".tone").forEach((el) => el.classList.toggle("active", el.dataset.tone === state.tone));
   renderGallery();
+  if (state.pendingBuy) {
+    state.pendingBuy = false;
+    goCheckout();
+  }
 };
 document.querySelector("#thumbs").onclick = (event) => {
   const btn = event.target.closest("[data-slide]");
@@ -162,7 +183,12 @@ document.querySelector("#qty").onchange = (event) => {
   state.qty = Math.min(5, Math.max(1, Number(event.target.value) || 1));
   event.target.value = state.qty;
 };
-document.querySelectorAll("[data-buy]").forEach((btn) => { btn.onclick = goCheckout; });
+document.querySelectorAll("[data-buy]").forEach((btn) => {
+  btn.onclick = () => {
+    btn.blur();
+    goCheckout();
+  };
+});
 document.querySelector("#open-review").onclick = () => document.querySelector("#review-modal").classList.add("open");
 document.querySelector("#more-reviews").onclick = () => {
   state.shown = REVIEWS.length;

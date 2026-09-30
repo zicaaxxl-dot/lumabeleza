@@ -22,7 +22,7 @@
       </a>
       <button class="icon-btn cart-btn" id="open-cart" aria-label="Carrinho">
         <span class="cart-count" data-n="0"></span>
-        🛒
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 6h15l-1.5 9h-12z"/><path d="M6 6L5 3H2"/><circle cx="9" cy="20" r="1.4" fill="currentColor"/><circle cx="18" cy="20" r="1.4" fill="currentColor"/></svg>
       </button>
     </div>
   </header>
@@ -38,13 +38,7 @@
       <div class="thumbs" id="thumbs"></div>
     </section>
 
-    <section class="buy">
-      <div class="trust-row">
-        <div><span>🛡</span>COMPRA SEGURA</div>
-        <div><span>🚚</span>ENTREGA EM ATÉ 7 DIAS ÚTEIS</div>
-        <div><span>★</span>PRODUTO ORIGINAL</div>
-        <div><span>●●●●</span>EXCELENTES AVALIAÇÕES</div>
-      </div>
+    <section class="buy" id="comprar">
       <span class="flash">OFERTAS RELÂMPAGO</span>
       <h1>Base com Refil + Pincel Mágico e Rímel</h1>
       <div class="rule"></div>
@@ -53,9 +47,10 @@
         <span class="old" id="old-price"></span>
         <span class="now" id="price"></span>
       </div>
-      <p class="installments" id="installments"></p>
-      <p class="label">Tom</p>
+      <p class="installments">Pagamento via PIX</p>
+      <p class="label" id="tom-label">Escolha o tom</p>
       <div class="tones" id="tones"></div>
+      <p class="tone-hint" id="tone-hint">Selecione o tom da base para continuar.</p>
       <div class="actions">
         <div class="qty">
           <button type="button" id="minus" aria-label="Diminuir">−</button>
@@ -66,22 +61,9 @@
       </div>
       <div class="cards">
         <div class="card-icons">
-          <img class="brand" src="images/ui/mastercard.svg" alt="Mastercard">
-          <img class="brand" src="images/ui/visa.svg" alt="Visa">
-          <img class="brand" src="images/ui/elo.svg" alt="Elo">
-          <img class="brand" src="images/ui/amex.svg" alt="American Express">
-          <img class="brand" src="images/ui/diners.svg" alt="Diners">
           <img class="brand" src="images/ui/pix.svg" alt="Pix">
         </div>
-        <p>PARCELE SUAS COMPRAS NAS MELHORES BANDEIRAS</p>
-      </div>
-      <div class="guarantees">
-        <div class="guarantee"><img class="seal" src="images/ui/selo-1.svg" alt=""><div><strong>Compra garantida:</strong> você tem até 30 dias de garantia</div></div>
-        <div class="guarantee"><img class="seal" src="images/ui/selo-2.svg" alt=""><div><strong>Troca grátis:</strong> você tem até 7 dias para testar o produto</div></div>
-        <div class="guarantee ship">
-          <img class="correios" src="images/ui/correios.svg" alt="Correios">
-          <div><strong>Frete grátis:</strong> para todo o Brasil<br>Entrega garantida em até 7 dias úteis</div>
-        </div>
+        <p>PAGAMENTO NO PIX · FRETE GRÁTIS</p>
       </div>
     </section>
 
@@ -113,15 +95,7 @@
     </section>
   </main>
 
-  <section class="footer-perks">
-    <div class="perk"><span>📦</span><div><strong>Frete grátis</strong><p>Receba seu pedido no conforto da sua casa com entrega garantida e segurada pelos Correios.</p></div></div>
-    <div class="perk"><span>🛒</span><div><strong>Pedido monitorado</strong><p>Acompanhe seu pedido do envio à entrega com total transparência e segurança.</p></div></div>
-    <div class="perk"><span>🎧</span><div><strong>Precisa de atendimento?</strong><p>Entre em contato via WhatsApp ou e-mail.</p></div></div>
-    <div class="perk"><span>🔒</span><div><strong>Compra segura</strong><p>Compra 100% segura em um ambiente protegido.</p></div></div>
-  </section>
-
   <section class="newsletter">
-    <div>✉</div>
     <h3>Receba ofertas exclusivas por e-mail!</h3>
     <form id="news">
       <input type="email" required placeholder="Digite seu e-mail" aria-label="E-mail">
@@ -150,19 +124,8 @@
         <a href="politicas.html#rastreio">Rastrear pedido</a>
         <a href="index.html">Quem somos</a>
       </div>
-      <h3>Segurança e qualidade</h3>
-      <div class="pay-row sec-row">
-        <img src="images/ui/envio-1.png" alt="Selo de segurança">
-        <img src="images/ui/envio-2.png" alt="Selo de qualidade">
-        <img src="images/ui/envio-3.png" alt="Selo de compra segura">
-      </div>
       <h3>Nós aceitamos</h3>
       <div class="pay-row">
-        <img class="brand" src="images/ui/mastercard.svg" alt="Mastercard">
-        <img class="brand" src="images/ui/visa.svg" alt="Visa">
-        <img class="brand" src="images/ui/elo.svg" alt="Elo">
-        <img class="brand" src="images/ui/amex.svg" alt="American Express">
-        <img class="brand" src="images/ui/diners.svg" alt="Diners">
         <img class="brand" src="images/ui/pix.svg" alt="Pix">
       </div>
       <h3>Formas de envio</h3>

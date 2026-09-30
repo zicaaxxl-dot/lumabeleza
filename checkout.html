@@ -14,7 +14,7 @@
       <span class="script" style="font-size:28px">luma</span>
       <span class="word" style="font-size:16px">beleza</span>
     </a>
-    <div class="ck-secure">🔒 Pagamento 100% seguro</div>
+    <div class="ck-secure">Pagamento seguro</div>
   </header>
 
   <main class="vega">
@@ -32,7 +32,7 @@
         <p class="error" id="err-id"></p>
       </section>
 
-      <section class="vega-box">
+      <section class="vega-box vega-step" id="step-entrega">
         <h2><span class="vstep">2</span> Entrega</h2>
         <div class="cep-row">
           <div class="field"><label for="cep">CEP</label><input id="cep" name="cep" inputmode="numeric" autocomplete="postal-code" placeholder="00000-000" required></div>
@@ -59,49 +59,18 @@
         <p class="error" id="err-addr"></p>
       </section>
 
-      <section class="vega-box">
+      <section class="vega-box vega-step" id="step-pay">
         <h2><span class="vstep">3</span> Pagamento</h2>
-        <label class="pay-opt active">
-          <input type="radio" name="pagamento" value="pix" checked>
+        <div class="pay-opt active">
           <img class="pay-ico" src="images/ui/pix.svg" alt="">
-          <span class="pay-copy"><strong>PIX</strong><small>Aprovação imediata</small></span>
+          <span class="pay-copy"><strong>PIX</strong><small>O código do pedido aparece na próxima tela</small></span>
           <span class="pay-tag">Na hora</span>
-          <div class="pay-body">O código do pedido aparece na próxima tela.</div>
-        </label>
-        <label class="pay-opt">
-          <input type="radio" name="pagamento" value="cartao">
-          <img class="pay-ico" src="images/ui/mastercard.svg" alt="">
-          <span class="pay-copy"><strong>Cartão de crédito</strong><small>Em até 10x</small></span>
-          <div class="pay-body">
-              <div class="field"><label for="cartao">Número do cartão</label><input id="cartao" inputmode="numeric" autocomplete="cc-number" placeholder="0000 0000 0000 0000"></div>
-              <div class="field"><label for="nome-cartao">Nome impresso</label><input id="nome-cartao" autocomplete="cc-name"></div>
-              <div class="grid-2">
-                <div class="field"><label for="validade">Validade</label><input id="validade" placeholder="MM/AA" autocomplete="cc-exp"></div>
-                <div class="field"><label for="cvv">CVV</label><input id="cvv" inputmode="numeric" autocomplete="cc-csc" maxlength="4"></div>
-              </div>
-              <p class="muted">Os dados do cartão ficam só nesta tela e não são salvos.</p>
-            </div>
-        </label>
-        <label class="pay-opt">
-          <input type="radio" name="pagamento" value="boleto">
-          <img class="pay-ico" src="images/ui/elo.svg" alt="">
-          <span class="pay-copy"><strong>Boleto</strong><small>Compensação em 1 a 2 dias úteis</small></span>
-          <div class="pay-body">As instruções seguem para o e-mail informado.</div>
-        </label>
-        <p class="error" id="err-pay"></p>
+        </div>
         <button class="cta block" type="submit" id="finish">FINALIZAR COMPRA</button>
       </section>
     </form>
 
-    <div class="vega-brands">
-      <img src="images/ui/mastercard.svg" alt="Mastercard">
-      <img src="images/ui/visa.svg" alt="Visa">
-      <img src="images/ui/elo.svg" alt="Elo">
-      <img src="images/ui/amex.svg" alt="American Express">
-      <img src="images/ui/diners.svg" alt="Diners">
-      <img src="images/ui/pix.svg" alt="Pix">
-    </div>
-    <p class="vega-safe">Ambiente seguro · Frete grátis para todo o Brasil</p>
+    <p class="vega-safe">Pagamento somente via PIX · Frete grátis para todo o Brasil</p>
   </main>
   <script src="js/store.js"></script>
   <script src="js/checkout.js"></script>

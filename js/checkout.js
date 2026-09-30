@@ -48,71 +48,88 @@ async function buscarCep() {
     document.querySelector("#cidade").value = data.localidade || "";
     document.querySelector("#uf").value = data.uf || "";
     document.querySelector("#numero").focus();
+    refreshSteps();
   } catch {
     toast("Não foi possível buscar o CEP");
   }
 }
 
-function selectedPay() {
-  return document.querySelector('input[name="pagamento"]:checked').value;
+function field(id) {
+  return document.querySelector("#" + id).value.trim();
 }
 
-document.querySelectorAll('input[name="pagamento"]').forEach((input) => {
-  input.onchange = () => {
-    document.querySelectorAll(".pay-opt").forEach((box) => {
-      const radio = box.querySelector('input[name="pagamento"]');
-      if (!radio) return;
-      box.classList.toggle("active", radio.checked);
-    });
-  };
-});
+function identityOk() {
+  const email = field("email");
+  return field("nome").split(/\s+/).filter(Boolean).length >= 2
+    && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+    && onlyDigits(field("telefone")).length >= 10
+    && validCpf(field("cpf"));
+}
+
+function addressOk() {
+  return onlyDigits(field("cep")).length === 8
+    && field("rua").length > 2
+    && field("numero").length > 0
+    && field("bairro").length > 1
+    && field("cidade").length > 1
+    && field("uf").length === 2;
+}
+
+const revealed = { entrega: false, pagamento: false };
+
+function refreshSteps() {
+  const idOk = identityOk();
+  const addrOk = idOk && addressOk();
+  const entrega = document.querySelector("#step-entrega");
+  const pay = document.querySelector("#step-pay");
+  entrega.classList.toggle("is-open", idOk);
+  pay.classList.toggle("is-open", addrOk);
+  if (idOk && !revealed.entrega) {
+    revealed.entrega = true;
+    entrega.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+  if (!idOk) revealed.entrega = false;
+  if (addrOk && !revealed.pagamento) {
+    revealed.pagamento = true;
+    pay.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+  if (!addrOk) revealed.pagamento = false;
+}
 
 document.querySelector("#telefone").addEventListener("input", (event) => {
   event.target.value = maskPhone(event.target.value);
+  refreshSteps();
 });
 document.querySelector("#cpf").addEventListener("input", (event) => {
   event.target.value = maskCpf(event.target.value);
+  refreshSteps();
 });
 document.querySelector("#cep").addEventListener("input", (event) => {
   event.target.value = maskCep(event.target.value);
   if (onlyDigits(event.target.value).length === 8) buscarCep();
+  refreshSteps();
 });
 document.querySelector("#buscar-cep").onclick = buscarCep;
+["nome", "email", "rua", "numero", "bairro", "cidade", "uf"].forEach((id) => {
+  document.querySelector("#" + id).addEventListener("input", refreshSteps);
+});
 
 document.querySelector("#checkout").onsubmit = (event) => {
   event.preventDefault();
   const form = new FormData(event.target);
   document.querySelector("#err-id").textContent = "";
   document.querySelector("#err-addr").textContent = "";
-  document.querySelector("#err-pay").textContent = "";
 
-  if (form.get("nome").trim().split(" ").length < 2) {
-    document.querySelector("#err-id").textContent = "Informe nome e sobrenome.";
+  if (!identityOk()) {
+    document.querySelector("#err-id").textContent = "Preencha nome, e-mail, celular e um CPF válido.";
+    document.querySelector("#nome").scrollIntoView({ behavior: "smooth", block: "center" });
     return;
   }
-  if (onlyDigits(form.get("telefone")).length < 10) {
-    document.querySelector("#err-id").textContent = "Informe um celular válido.";
+  if (!addressOk()) {
+    document.querySelector("#step-entrega").classList.add("is-open");
+    document.querySelector("#err-addr").textContent = "Complete o endereço de entrega.";
+    document.querySelector("#step-entrega").scrollIntoView({ behavior: "smooth", block: "start" });
     return;
-  }
-  if (!validCpf(form.get("cpf"))) {
-    document.querySelector("#err-id").textContent = "CPF inválido.";
-    return;
-  }
-  if (onlyDigits(form.get("cep")).length !== 8) {
-    document.querySelector("#err-addr").textContent = "CEP inválido.";
-    return;
-  }
-
-  const pagamento = selectedPay();
-  if (pagamento === "cartao") {
-    const numero = onlyDigits(document.querySelector("#cartao").value);
-    const validade = document.querySelector("#validade").value.trim();
-    const cvv = onlyDigits(document.querySelector("#cvv").value);
-    const nomeCartao = document.querySelector("#nome-cartao").value.trim();
-    if (numero.length < 13 || !/^\d{2}\/\d{2}$/.test(validade) || cvv.length < 3 || nomeCartao.length < 3) {
-      document.querySelector("#err-pay").textContent = "Confira os dados do cartão. Eles não são armazenados.";
-      return;
-    }
   }
 
   const order = {
@@ -131,7 +148,7 @@ document.querySelector("#checkout").onsubmit = (event) => {
       cidade: form.get("cidade").trim(),
       uf: form.get("uf").trim().toUpperCase(),
     },
-    pagamento,
+    pagamento: "pix",
     total: draft.price * draft.qty,
     criadoEm: new Date().toISOString(),
   };
