@@ -128,8 +128,10 @@ button { cursor: pointer; }
 .stage img {
   width: 100%;
   height: auto;
+  aspect-ratio: 1000 / 1333;
   object-fit: contain;
   position: static;
+  background: #f7f3ec;
 }
 .discount {
   position: absolute;
@@ -336,6 +338,7 @@ button { cursor: pointer; }
 .landing img {
   width: 100%;
   height: auto;
+  background: #f7f3ec;
   position: static;
 }
 .sales { position: static; }

@@ -17,9 +17,9 @@ const GALLERY = [
   "images/carrossel/01.jpg",
   "images/carrossel/02.jpg",
   "images/carrossel/03.jpg",
-  "images/carrossel/04.png",
-  "images/carrossel/05.png",
-  "images/carrossel/06.png",
+  "images/carrossel/04.jpg",
+  "images/carrossel/05.jpg",
+  "images/carrossel/06.jpg",
 ];
 
 function money(value) {

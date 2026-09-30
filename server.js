@@ -27,15 +27,29 @@ const server = http.createServer((req, res) => {
     res.end("forbidden");
     return;
   }
-  fs.readFile(file, (err, data) => {
-    if (err) {
-      res.writeHead(404, { "Content-Type": "text/plain; charset=utf-8" });
+  fs.stat(file, (err, stat) => {
+    if (err || !stat.isFile()) {
+      res.writeHead(404, { "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "no-cache" });
       res.end("not found");
       return;
     }
     const ext = path.extname(file).toLowerCase();
-    res.writeHead(200, { "Content-Type": types[ext] || "application/octet-stream" });
-    res.end(data);
+    const image = [".jpg", ".jpeg", ".png", ".svg", ".webp", ".ico"].includes(ext);
+    const cache = image ? "public, max-age=2592000" : "no-cache";
+    const etag = `W/"${stat.size}-${Math.round(stat.mtimeMs)}"`;
+    if (req.headers["if-none-match"] === etag) {
+      res.writeHead(304, { ETag: etag, "Cache-Control": cache });
+      res.end();
+      return;
+    }
+    res.writeHead(200, {
+      "Content-Type": types[ext] || "application/octet-stream",
+      "Content-Length": stat.size,
+      ETag: etag,
+      "Last-Modified": stat.mtime.toUTCString(),
+      "Cache-Control": cache,
+    });
+    fs.createReadStream(file).pipe(res);
   });
 });
 

@@ -30,17 +30,26 @@ function slides() {
   return [GALLERY[0], tone.image, ...GALLERY.slice(1)];
 }
 
+let thumbKey = "";
+
 function renderGallery() {
   const list = slides();
   const stage = document.querySelector("#stage-img");
-  stage.src = list[state.slide];
+  if (stage.getAttribute("src") !== list[state.slide]) stage.src = list[state.slide];
   stage.alt = STORE.product;
   const thumbs = document.querySelector("#thumbs");
-  thumbs.innerHTML = list.map((src, index) => `
-    <button type="button" class="${index === state.slide ? "active" : ""}" data-slide="${index}">
-      <img src="${src}" alt="Foto ${index + 1} do produto">
-    </button>
-  `).join("");
+  const key = list.join("|");
+  if (thumbKey !== key) {
+    thumbKey = key;
+    thumbs.innerHTML = list.map((src, index) => `
+      <button type="button" class="${index === state.slide ? "active" : ""}" data-slide="${index}">
+        <img src="${src}" alt="Foto ${index + 1} do produto" width="144" height="192" decoding="async">
+      </button>
+    `).join("");
+  }
+  thumbs.querySelectorAll("button").forEach((btn, index) => {
+    btn.classList.toggle("active", index === state.slide);
+  });
 }
 
 function renderReviews() {
@@ -55,7 +64,7 @@ function renderReviews() {
         </div>
       </div>
       <p>${review.text}</p>
-      ${review.photo ? `<img class="review-photo" src="${review.photo}" alt="Foto enviada por ${review.name}">` : ""}
+      ${review.photo ? `<img class="review-photo" src="${review.photo}" alt="Foto enviada por ${review.name}" loading="lazy" decoding="async">` : ""}
     </article>
   `).join("");
   document.querySelector("#more-reviews").style.display = state.shown >= REVIEWS.length ? "none" : "block";
