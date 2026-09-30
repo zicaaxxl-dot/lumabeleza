@@ -8,14 +8,44 @@ const draft = readOrder() || {
   oldPrice: STORE.oldPrice,
 };
 
+const PROOF = [
+  { name: "Yasmin Elisa Alves", text: "Recebi no interior e a base cobre muito bem, igual ao vídeo. Podem comprar que é confiável.", photo: "images/avaliacoes/01.jpeg", stars: 5 },
+  { name: "Maisa Tenório", text: "Pelo preço vale muito. Veio a base com refil e a embalagem é muito chic.", photo: "images/avaliacoes/02.jpeg", stars: 5 },
+  { name: "Luiza Delgado", text: "Quando você vai batendo, ela se adapta ao tom da pele. A entrega veio certa.", photo: "images/avaliacoes/03.jpeg", stars: 5 },
+  { name: "Caroline Xavier", text: "Compra 1 base e vem o refil para quando acabar. Recomendo de olhos fechados.", photo: "images/avaliacoes/04.jpeg", stars: 5 },
+  { name: "Ana Rocha Nunes", text: "Embalagem linda, cobertura boa e chegou com uns 8 dias.", photo: "images/avaliacoes/05.jpeg", stars: 5 },
+  { name: "Karine Marques", text: "Chegou no tempo certo, com o refil prometido. Podem comprar que chega sim.", photo: "images/avaliacoes/10.jpeg", stars: 5 },
+];
+
+function renderProof() {
+  document.querySelector("#ck-proof").innerHTML = `
+    <h2>Avaliações de clientes <span>★★★★★ 4,9</span></h2>
+    <div class="ck-reviews">
+      ${PROOF.map((review) => `
+        <article class="ck-review">
+          ${review.photo
+            ? `<img src="${review.photo}" alt="" width="64" height="64" loading="lazy" decoding="async">`
+            : `<div class="ck-ava">${review.name[0]}</div>`}
+          <div>
+            <div class="ck-stars">${"★".repeat(review.stars)}</div>
+            <strong>${review.name}</strong>
+            <small>Compra verificada</small>
+            <p>${review.text}</p>
+          </div>
+        </article>
+      `).join("")}
+    </div>
+  `;
+}
+
 function renderSummary() {
   const total = draft.price * draft.qty;
   const old = draft.oldPrice * draft.qty;
   document.querySelector("#summary").innerHTML = `
     <h2>Resumo do pedido</h2>
     <div class="sum-top">
-      <img src="${String(draft.image).split("?")[0]}${ASSET}" alt="${draft.product}">
-      <div>
+      <img src="${String(draft.image).split("?")[0]}${ASSET}" alt="${draft.product}" width="64" height="64">
+      <div class="sum-mid">
         <strong>${draft.product}</strong>
         <span class="tone-chip">${draft.tone} · ${draft.qty} un.</span>
       </div>
@@ -156,4 +186,5 @@ document.querySelector("#checkout").onsubmit = (event) => {
   location.href = "obrigado.html";
 };
 
+renderProof();
 renderSummary();
