@@ -566,11 +566,26 @@ button { cursor: pointer; }
 }
 .vega-box {
   background: #fff;
-  margin: 14px 12px 0;
-  border: 1px solid #ececec;
-  border-radius: 16px;
-  padding: 18px 16px 16px;
-  box-shadow: 0 8px 24px rgba(16, 16, 16, 0.04);
+  margin: 10px 10px 0;
+  border: 1px solid #e6e6e6;
+  border-radius: 8px;
+  padding: 14px 12px 12px;
+  box-shadow: none;
+}
+.vega-radio {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid #1a1a1a;
+  box-shadow: inset 0 0 0 4px #fff, inset 0 0 0 9px #1a1a1a;
+  flex: 0 0 18px;
+}
+.cep-help {
+  display: inline-block;
+  margin: -4px 0 10px;
+  color: #1a73e8;
+  font-size: 13px;
+  font-weight: 700;
 }
 .vega-box h2 {
   margin: 0 0 14px;
@@ -592,11 +607,11 @@ button { cursor: pointer; }
 }
 .vega .field label { font-size: 12px; color: #666; font-weight: 700; }
 .vega .field input, .vega .field select {
-  height: 48px;
+  height: 46px;
   width: 100%;
-  border-radius: 10px;
-  border: 1px solid #e4e4e7;
-  background: #fafafa;
+  border-radius: 6px;
+  border: 1px solid #d5d5d5;
+  background: #fff;
   font-size: 16px;
 }
 @media (min-width: 720px) {

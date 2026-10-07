@@ -105,26 +105,7 @@ function addressOk() {
     && field("uf").length === 2;
 }
 
-const revealed = { entrega: false, pagamento: false };
-
-function refreshSteps() {
-  const idOk = identityOk();
-  const addrOk = idOk && addressOk();
-  const entrega = document.querySelector("#step-entrega");
-  const pay = document.querySelector("#step-pay");
-  entrega.classList.toggle("is-open", idOk);
-  pay.classList.toggle("is-open", addrOk);
-  if (idOk && !revealed.entrega) {
-    revealed.entrega = true;
-    entrega.scrollIntoView({ behavior: "smooth", block: "start" });
-  }
-  if (!idOk) revealed.entrega = false;
-  if (addrOk && !revealed.pagamento) {
-    revealed.pagamento = true;
-    pay.scrollIntoView({ behavior: "smooth", block: "start" });
-  }
-  if (!addrOk) revealed.pagamento = false;
-}
+function refreshSteps() {}
 
 document.querySelector("#telefone").addEventListener("input", (event) => {
   event.target.value = maskPhone(event.target.value);
