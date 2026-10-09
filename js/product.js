@@ -43,6 +43,12 @@ function renderGallery() {
   dots.innerHTML = list.map((_, index) => `
     <button type="button" class="${index === state.slide ? "active" : ""}" data-slide="${index}" aria-label="Foto ${index + 1}"></button>
   `).join("");
+  const thumbs = document.querySelector("#thumbs");
+  thumbs.innerHTML = list.map((src, index) => `
+    <button type="button" class="${index === state.slide ? "active" : ""}" data-slide="${index}" aria-label="Foto ${index + 1}">
+      <img src="${(THUMBS[src] || src) + ASSET}" alt="" width="72" height="72">
+    </button>
+  `).join("");
 }
 
 function barsHtml() {
@@ -112,12 +118,22 @@ function renderCart(cart, numbers) {
   dock.innerHTML = `
     <div class="dock-row"><span>Frete</span><b>Grátis</b></div>
     <div class="dock-row grand"><span>Total</span><b>${money(numbers.total)}</b></div>
-    <button class="cart-buy" type="button" data-buy>Comprar agora</button>
+    <button class="cart-buy" type="button" id="cart-checkout">Finalizar compra</button>
   `;
-  dock.querySelector("[data-buy]").onclick = () => {
+  dock.querySelector("#cart-checkout").onclick = () => {
     document.querySelector("#cart").classList.remove("open");
     goCheckout();
   };
+}
+
+function addToCart() {
+  if (!state.tonePicked) {
+    state.pendingBuy = true;
+    focusTones();
+    return;
+  }
+  syncCart();
+  document.querySelector("#cart").classList.add("open");
 }
 
 function goCheckout() {
@@ -169,7 +185,6 @@ function bindChrome() {
     }
     toast("Nenhum outro produto encontrado");
   };
-  document.querySelector("#wa").onclick = () => openWhatsApp();
   document.querySelector("#review-form").onsubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.target);
@@ -177,49 +192,21 @@ function bindChrome() {
     state.shown += 1;
     renderReviews();
     document.querySelector("#review-bars").innerHTML = barsHtml();
-    document.querySelector("#pop-bars").innerHTML = barsHtml();
     document.querySelector("#review-modal").classList.remove("open");
     event.target.reset();
     toast("Avaliação publicada");
   };
   document.querySelector("#open-rating").onclick = () => {
-    document.querySelector("#rating-pop").hidden = false;
-  };
-  document.querySelector("#close-pop").onclick = () => {
-    document.querySelector("#rating-pop").hidden = true;
-  };
-  document.querySelector("#read-reviews").onclick = () => {
-    document.querySelector("#rating-pop").hidden = true;
     document.querySelector("#avaliacoes").scrollIntoView();
   };
   document.querySelector("#open-shade").onclick = () => {
     document.querySelector("#duvidas").scrollIntoView();
   };
-  document.querySelector("#ship-form").onsubmit = async (event) => {
+  document.querySelector("#news").onsubmit = (event) => {
     event.preventDefault();
-    const cep = onlyDigits(document.querySelector("#cep").value);
-    const box = document.querySelector("#ship-result");
-    box.hidden = false;
-    if (cep.length !== 8) {
-      box.textContent = "Informe um CEP com 8 números.";
-      return;
-    }
-    box.textContent = "Calculando...";
-    try {
-      const res = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
-      const data = await res.json();
-      if (data.erro) {
-        box.textContent = "CEP não encontrado.";
-        return;
-      }
-      box.innerHTML = `<ul class="ship-option"><li><b class="ship-free">Frete grátis</b><span class="ship-when">${data.localidade}/${data.uf} · até 7 dias úteis</span></li></ul>`;
-    } catch {
-      box.textContent = "Não foi possível calcular agora. O frete continua grátis.";
-    }
+    event.target.reset();
+    toast("E-mail cadastrado");
   };
-  document.querySelector("#cep").addEventListener("input", (event) => {
-    event.target.value = maskCep(event.target.value);
-  });
   document.querySelector("#gallery-dots").onclick = (event) => {
     const btn = event.target.closest("[data-slide]");
     if (!btn) return;
@@ -235,18 +222,20 @@ function bindChrome() {
     state.slide = (state.slide + 1) % slides().length;
     renderGallery();
   };
+  document.querySelector("#thumbs").onclick = (event) => {
+    const btn = event.target.closest("[data-slide]");
+    if (!btn) return;
+    state.slide = Number(btn.dataset.slide);
+    renderGallery();
+  };
 }
 
 document.querySelector("#old-price").textContent = money(STORE.oldPrice);
 document.querySelector("#price").textContent = money(STORE.price);
-document.querySelector("#bar-old").textContent = money(STORE.oldPrice);
-document.querySelector("#bar-now").textContent = money(STORE.price);
 document.querySelector("#review-bars").innerHTML = barsHtml();
-document.querySelector("#pop-bars").innerHTML = barsHtml();
 document.querySelector("#tones").innerHTML = TONES.map((tone) => `
-  <button type="button" class="tone" data-tone="${tone.id}">
+  <button type="button" class="tone" data-tone="${tone.id}" aria-label="${shortTone(tone.label)}">
     <img src="${(THUMBS[tone.image] || tone.image) + ASSET}" alt="">
-    <strong>${shortTone(tone.label)}</strong>
   </button>
 `).join("");
 
@@ -258,35 +247,20 @@ document.querySelector("#tones").onclick = (event) => {
   state.slide = 1;
   const tone = TONES.find((item) => item.id === state.tone);
   document.querySelector("#tones").classList.remove("need-pick");
+  document.querySelector("#tom-label").textContent = "Cor - " + shortTone(tone.label);
   document.querySelector("#tone-hint").textContent = tone.hint;
   document.querySelectorAll(".tone").forEach((el) => el.classList.toggle("active", el.dataset.tone === state.tone));
   renderGallery();
   syncCart();
   if (state.pendingBuy) {
     state.pendingBuy = false;
-    goCheckout();
+    addToCart();
   }
-};
-document.querySelector("#qty").value = state.qty;
-document.querySelector("#minus").onclick = () => {
-  state.qty = Math.max(1, state.qty - 1);
-  document.querySelector("#qty").value = state.qty;
-  if (state.tonePicked) syncCart();
-};
-document.querySelector("#plus").onclick = () => {
-  state.qty = Math.min(5, state.qty + 1);
-  document.querySelector("#qty").value = state.qty;
-  if (state.tonePicked) syncCart();
-};
-document.querySelector("#qty").onchange = (event) => {
-  state.qty = Math.min(5, Math.max(1, Number(event.target.value) || 1));
-  event.target.value = state.qty;
-  if (state.tonePicked) syncCart();
 };
 document.querySelectorAll("[data-buy]").forEach((btn) => {
   btn.onclick = () => {
     btn.blur();
-    goCheckout();
+    addToCart();
   };
 });
 document.querySelector("#open-review").onclick = () => document.querySelector("#review-modal").classList.add("open");
@@ -301,8 +275,9 @@ if (savedCart.toneId && TONES.some((item) => item.id === savedCart.toneId)) {
   state.tonePicked = true;
   state.qty = savedCart.qty;
   state.slide = 1;
-  document.querySelector("#qty").value = state.qty;
-  document.querySelector("#tone-hint").textContent = TONES.find((item) => item.id === state.tone).hint;
+  const savedTone = TONES.find((item) => item.id === state.tone);
+  document.querySelector("#tom-label").textContent = "Cor - " + shortTone(savedTone.label);
+  document.querySelector("#tone-hint").textContent = savedTone.hint;
   document.querySelectorAll(".tone").forEach((el) => el.classList.toggle("active", el.dataset.tone === state.tone));
 }
 
