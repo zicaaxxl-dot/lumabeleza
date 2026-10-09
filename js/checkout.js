@@ -1,87 +1,30 @@
-const draft = readOrder() || {
-  product: STORE.product,
-  tone: "Bege Claro",
-  toneId: "claro",
-  image: "images/seletor/claro.jpg",
-  qty: 1,
-  price: STORE.price,
-  oldPrice: STORE.oldPrice,
-};
-
-const PROOF = [
-  { name: "Yasmin Elisa Alves", text: "Recebi no interior e a base cobre muito bem, igual ao vídeo. Podem comprar que é confiável.", photo: "images/avaliacoes/01.jpeg", stars: 5 },
-  { name: "Maisa Tenório", text: "Pelo preço vale muito. Veio a base com refil e a embalagem é muito chic.", photo: "images/avaliacoes/02.jpeg", stars: 5 },
-  { name: "Luiza Delgado", text: "Quando você vai batendo, ela se adapta ao tom da pele. A entrega veio certa.", photo: "images/avaliacoes/03.jpeg", stars: 5 },
-  { name: "Caroline Xavier", text: "Compra 1 base e vem o refil para quando acabar. Recomendo de olhos fechados.", photo: "images/avaliacoes/04.jpeg", stars: 5 },
-  { name: "Ana Rocha Nunes", text: "Embalagem linda, cobertura boa e chegou com uns 8 dias.", photo: "images/avaliacoes/05.jpeg", stars: 5 },
-  { name: "Karine Marques", text: "Chegou no tempo certo, com o refil prometido. Podem comprar que chega sim.", photo: "images/avaliacoes/10.jpeg", stars: 5 },
-];
-
-function renderProof() {
-  document.querySelector("#ck-proof").innerHTML = `
-    <h2>Avaliações de clientes <span>★★★★★ 4,9 · 538</span></h2>
-    <div class="ck-reviews">
-      ${PROOF.map((review) => `
-        <article class="ck-review">
-          ${review.photo
-            ? `<img src="${review.photo}" alt="" width="64" height="64" loading="lazy" decoding="async">`
-            : `<div class="ck-ava">${review.name[0]}</div>`}
-          <div>
-            <div class="ck-stars">${"★".repeat(review.stars)}</div>
-            <strong>${review.name}</strong>
-            <small>Compra verificada</small>
-            <p>${review.text}</p>
-          </div>
-        </article>
-      `).join("")}
-    </div>
-  `;
-}
+let cart = readCart();
+if (!cart.toneId) location.replace("index.html");
+let numbers = quote(cart);
+const DRAFT = "luma-checkout-draft";
+let step = 1;
 
 function renderSummary() {
-  const total = draft.price * draft.qty;
-  const old = draft.oldPrice * draft.qty;
+  const saved = Math.max(0, Math.round((numbers.old - numbers.total) * 100) / 100);
   document.querySelector("#summary").innerHTML = `
-    <h2>Resumo do pedido</h2>
-    <div class="sum-top">
-      <img src="${String(draft.image).split("?")[0]}${ASSET}" alt="${draft.product}" width="64" height="64">
-      <div class="sum-mid">
-        <strong>${draft.product}</strong>
-        <span class="tone-chip">${draft.tone} · ${draft.qty} un.</span>
+    <div class="co-item">
+      <img src="${String(cart.image).split("?")[0]}${ASSET}" alt="" width="72" height="90">
+      <div>
+        <strong>${STORE.product}</strong>
+        <span>${cart.tone} · ${cart.qty} un.</span>
       </div>
-      <div class="vega-total"><s>${money(old)}</s>${money(total)}</div>
+      <div class="co-item-price"><s>${money(numbers.old)}</s><b>${money(numbers.base)}</b></div>
     </div>
-    <div class="totals">
-      <div><span>Produtos</span><span>${money(total)}</span></div>
-      <div><span>Frete</span><span>Grátis</span></div>
-      <div class="grand"><span>Total</span><span>${money(total)}</span></div>
+    <div class="co-rows">
+      <div><span>Subtotal</span><b>${money(numbers.base)}</b></div>
+      ${numbers.couponOff ? `<div class="sub"><span>Cupom BEMVINDO10</span><span class="red">−${money(numbers.couponOff)}</span></div>` : ""}
+      <div><span>Frete</span><b class="free">Grátis</b></div>
+      <div class="total"><span>Total</span><b>${money(numbers.total)}</b></div>
     </div>
+    ${saved ? `<p class="co-save">Você economiza <b>${money(saved)}</b></p>` : ""}
   `;
-}
-
-async function buscarCep() {
-  const cep = onlyDigits(document.querySelector("#cep").value);
-  if (cep.length !== 8) {
-    document.querySelector("#err-addr").textContent = "Informe um CEP com 8 números.";
-    return;
-  }
-  try {
-    const res = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
-    const data = await res.json();
-    if (data.erro) {
-      document.querySelector("#err-addr").textContent = "CEP não encontrado.";
-      return;
-    }
-    document.querySelector("#err-addr").textContent = "";
-    document.querySelector("#rua").value = data.logradouro || "";
-    document.querySelector("#bairro").value = data.bairro || "";
-    document.querySelector("#cidade").value = data.localidade || "";
-    document.querySelector("#uf").value = data.uf || "";
-    document.querySelector("#numero").focus();
-    refreshSteps();
-  } catch {
-    toast("Não foi possível buscar o CEP");
-  }
+  document.querySelector("#sum-count").textContent = String(numbers.count);
+  document.querySelector("#pix-amount").textContent = money(numbers.total);
 }
 
 function field(id) {
@@ -89,9 +32,8 @@ function field(id) {
 }
 
 function identityOk() {
-  const email = field("email");
   return field("nome").split(/\s+/).filter(Boolean).length >= 2
-    && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+    && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(field("email"))
     && onlyDigits(field("telefone")).length >= 10
     && validCpf(field("cpf"));
 }
@@ -105,67 +47,234 @@ function addressOk() {
     && field("uf").length === 2;
 }
 
-function refreshSteps() {}
+function showStep(next) {
+  step = next;
+  document.querySelectorAll(".step-panel").forEach((panel) => {
+    panel.hidden = Number(panel.dataset.step) !== step;
+  });
+  document.querySelectorAll("[data-goto]").forEach((btn) => {
+    const n = Number(btn.dataset.goto);
+    const item = btn.closest("li");
+    item.classList.toggle("on", n === step);
+    item.classList.toggle("done", n < step);
+  });
+  document.querySelector("#finish").textContent = ["", "Ir para entrega", "Ir para pagamento", "Finalizar compra"][step];
+  saveDraft();
+  window.scrollTo(0, 0);
+}
+
+function focusInvalid(stepNumber) {
+  const map = {
+    1: ["nome", "email", "telefone", "cpf"],
+    2: ["cep", "rua", "numero", "bairro", "cidade", "uf"],
+  };
+  const rules = {
+    nome: () => field("nome").split(/\s+/).filter(Boolean).length >= 2,
+    email: () => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(field("email")),
+    telefone: () => onlyDigits(field("telefone")).length >= 10,
+    cpf: () => validCpf(field("cpf")),
+    cep: () => onlyDigits(field("cep")).length === 8,
+    rua: () => field("rua").length > 2,
+    numero: () => field("numero").length > 0,
+    bairro: () => field("bairro").length > 1,
+    cidade: () => field("cidade").length > 1,
+    uf: () => field("uf").length === 2,
+  };
+  const id = (map[stepNumber] || []).find((key) => !rules[key]());
+  if (id) document.querySelector("#" + id).focus();
+}
+
+async function buscarCep() {
+  const cep = onlyDigits(document.querySelector("#cep").value);
+  if (cep.length !== 8) {
+    document.querySelector("#err-addr").textContent = "Informe um CEP com 8 números.";
+    return;
+  }
+  try {
+    const res = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+    const data = await res.json();
+    if (data.erro) {
+      document.querySelector("#err-addr").textContent = "CEP não encontrado. Preencha o endereço.";
+      return;
+    }
+    document.querySelector("#err-addr").textContent = "";
+    document.querySelector("#rua").value = data.logradouro || "";
+    document.querySelector("#bairro").value = data.bairro || "";
+    document.querySelector("#cidade").value = data.localidade || "";
+    document.querySelector("#uf").value = data.uf || "";
+    document.querySelector("#numero").focus();
+    paintChecks();
+    saveDraft();
+  } catch {
+    document.querySelector("#err-addr").textContent = "Não foi possível buscar o CEP. Preencha o endereço.";
+  }
+}
+
+function saveDraft() {
+  const data = {};
+  ["nome", "email", "telefone", "cpf", "cep", "rua", "numero", "complemento", "bairro", "cidade", "uf", "destinatario"].forEach((id) => {
+    data[id] = document.querySelector("#" + id).value;
+  });
+  data.step = step;
+  sessionStorage.setItem(DRAFT, JSON.stringify(data));
+}
+
+function loadDraft() {
+  try {
+    const data = JSON.parse(sessionStorage.getItem(DRAFT) || "null");
+    if (!data) return;
+    Object.keys(data).forEach((id) => {
+      const input = document.querySelector("#" + id);
+      if (input && id !== "step") input.value = data[id];
+    });
+  } catch {
+    sessionStorage.removeItem(DRAFT);
+  }
+}
+
+function paintChecks() {
+  const rules = {
+    nome: () => field("nome").split(/\s+/).filter(Boolean).length >= 2,
+    email: () => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(field("email")),
+    telefone: () => onlyDigits(field("telefone")).length >= 10,
+    cpf: () => validCpf(field("cpf")),
+    cep: () => onlyDigits(field("cep")).length === 8,
+    rua: () => field("rua").length > 2,
+    numero: () => field("numero").length > 0,
+    bairro: () => field("bairro").length > 1,
+    cidade: () => field("cidade").length > 1,
+    uf: () => field("uf").length === 2,
+    destinatario: () => field("destinatario").length > 2,
+  };
+  Object.keys(rules).forEach((id) => {
+    const input = document.querySelector("#" + id);
+    const wrap = input && input.closest(".field");
+    if (wrap) wrap.classList.toggle("is-ok", rules[id]());
+  });
+}
+
+function paintCoupon() {
+  const on = cart.coupon === "BEMVINDO10";
+  document.querySelector("#use-welcome").classList.toggle("on", on);
+  if (on) document.querySelector("#coupon").value = "BEMVINDO10";
+  document.querySelector("#apply-coupon").textContent = on ? "Aplicado" : "Aplicar";
+  const msg = document.querySelector("#coupon-msg");
+  msg.textContent = on ? "Cupom BEMVINDO10 aplicado." : "";
+  msg.classList.toggle("ok", on);
+}
+
+function applyWelcome() {
+  document.querySelector("#coupon").value = "BEMVINDO10";
+  cart.coupon = "BEMVINDO10";
+  saveCart(cart);
+  numbers = quote(cart);
+  renderSummary();
+  paintCoupon();
+}
 
 document.querySelector("#telefone").addEventListener("input", (event) => {
   event.target.value = maskPhone(event.target.value);
-  refreshSteps();
 });
 document.querySelector("#cpf").addEventListener("input", (event) => {
   event.target.value = maskCpf(event.target.value);
-  refreshSteps();
 });
 document.querySelector("#cep").addEventListener("input", (event) => {
   event.target.value = maskCep(event.target.value);
   if (onlyDigits(event.target.value).length === 8) buscarCep();
-  refreshSteps();
 });
-document.querySelector("#buscar-cep").onclick = buscarCep;
-["nome", "email", "rua", "numero", "bairro", "cidade", "uf"].forEach((id) => {
-  document.querySelector("#" + id).addEventListener("input", refreshSteps);
+document.querySelector("#buscar-cep").onclick = () => {
+  if (onlyDigits(document.querySelector("#cep").value).length === 8) buscarCep();
+  else window.open("https://buscacepinter.correios.com.br/app/endereco/index.php", "_blank", "noopener");
+};
+document.querySelector("#checkout").addEventListener("input", () => {
+  if (!field("destinatario") && field("nome")) document.querySelector("#destinatario").value = field("nome");
+  paintChecks();
+  saveDraft();
 });
+document.querySelectorAll("[data-goto]").forEach((btn) => {
+  btn.onclick = () => {
+    const target = Number(btn.dataset.goto);
+    if (target <= step) showStep(target);
+  };
+});
+document.querySelector("#toggle-summary").onclick = () => {
+  const body = document.querySelector("#summary");
+  body.hidden = !body.hidden;
+  document.querySelector("#toggle-summary").setAttribute("aria-expanded", String(!body.hidden));
+};
+document.querySelector("#apply-coupon").onclick = () => {
+  const code = document.querySelector("#coupon").value.trim().toUpperCase();
+  if (code === "BEMVINDO10") {
+    applyWelcome();
+    return;
+  }
+  cart.coupon = "";
+  saveCart(cart);
+  numbers = quote(cart);
+  renderSummary();
+  paintCoupon();
+  const msg = document.querySelector("#coupon-msg");
+  msg.textContent = code ? "Esse cupom não existe." : "";
+  msg.classList.remove("ok");
+};
+document.querySelector("#use-welcome").onclick = applyWelcome;
 
-document.querySelector("#checkout").onsubmit = (event) => {
-  event.preventDefault();
-  const form = new FormData(event.target);
+document.querySelector("#finish").onclick = () => {
   document.querySelector("#err-id").textContent = "";
   document.querySelector("#err-addr").textContent = "";
-
-  if (!identityOk()) {
-    document.querySelector("#err-id").textContent = "Preencha nome, e-mail, celular e um CPF válido.";
-    document.querySelector("#nome").scrollIntoView({ behavior: "smooth", block: "center" });
+  document.querySelector("#pix-err").textContent = "";
+  if (step === 1) {
+    if (!identityOk()) {
+      document.querySelector("#err-id").textContent = "Preencha nome completo, e-mail, telefone e um CPF válido.";
+      focusInvalid(1);
+      return;
+    }
+    showStep(2);
     return;
   }
-  if (!addressOk()) {
-    document.querySelector("#step-entrega").classList.add("is-open");
-    document.querySelector("#err-addr").textContent = "Complete o endereço de entrega.";
-    document.querySelector("#step-entrega").scrollIntoView({ behavior: "smooth", block: "start" });
+  if (step === 2) {
+    if (!addressOk()) {
+      document.querySelector("#err-addr").textContent = "Complete o endereço de entrega.";
+      focusInvalid(2);
+      return;
+    }
+    showStep(3);
     return;
   }
-
-  const order = {
-    ...draft,
+  saveOrder({
+    product: STORE.product,
+    tone: cart.tone,
+    toneId: cart.toneId,
+    image: cart.image,
+    qty: cart.qty,
+    price: STORE.price,
+    oldPrice: STORE.oldPrice,
+    coupon: cart.coupon,
     id: `LB${Date.now().toString().slice(-8)}`,
-    nome: form.get("nome").trim(),
-    email: form.get("email").trim(),
-    telefone: form.get("telefone").trim(),
-    cpf: form.get("cpf").trim(),
+    nome: field("nome"),
+    email: field("email"),
+    telefone: field("telefone"),
+    cpf: field("cpf"),
     endereco: {
-      cep: form.get("cep").trim(),
-      rua: form.get("rua").trim(),
-      numero: form.get("numero").trim(),
-      complemento: form.get("complemento").trim(),
-      bairro: form.get("bairro").trim(),
-      cidade: form.get("cidade").trim(),
-      uf: form.get("uf").trim().toUpperCase(),
+      cep: field("cep"),
+      rua: field("rua"),
+      numero: field("numero"),
+      complemento: field("complemento"),
+      bairro: field("bairro"),
+      cidade: field("cidade"),
+      uf: field("uf").toUpperCase(),
+      destinatario: field("destinatario") || field("nome"),
     },
     pagamento: "pix",
-    total: draft.price * draft.qty,
+    status: "pending",
+    total: numbers.total,
     criadoEm: new Date().toISOString(),
-  };
-  saveOrder(order);
+  });
   location.href = "obrigado.html";
 };
 
-renderProof();
+loadDraft();
+paintChecks();
 renderSummary();
+paintCoupon();
+showStep(1);

@@ -34,7 +34,62 @@ const THUMBS = {
   "images/seletor/escuro.jpg": "images/thumbs/escuro.jpg",
 };
 
-const ASSET = "?v=3";
+const ASSET = "?v=4";
+
+const UPSELLS = [];
+const GIFT = { id: "brinde", name: "Brinde exclusivo" };
+
+function emptyCart() {
+  return { toneId: "", tone: "", qty: 1, image: GALLERY[0], upsells: [], coupon: "" };
+}
+
+function readCart() {
+  try {
+    const cart = JSON.parse(localStorage.getItem("luma-cart") || "null");
+    if (!cart || typeof cart !== "object") return emptyCart();
+    cart.upsells = [];
+    cart.qty = Math.min(5, Math.max(1, Number(cart.qty) || 1));
+    cart.coupon = cart.coupon === "BEMVINDO10" ? "BEMVINDO10" : "";
+    return cart;
+  } catch {
+    return emptyCart();
+  }
+}
+
+function saveCart(cart) {
+  localStorage.setItem("luma-cart", JSON.stringify(cart));
+}
+
+function cents(value) {
+  return Math.round(Number(value) * 100);
+}
+
+function fromCents(value) {
+  return value / 100;
+}
+
+function quote(cart) {
+  const qty = cart && cart.toneId ? cart.qty : 0;
+  const base = cents(STORE.price) * qty;
+  const old = cents(STORE.oldPrice) * qty;
+  const coupon = cart && cart.coupon === "BEMVINDO10" ? "BEMVINDO10" : "";
+  const couponOff = coupon ? Math.round(base * 0.1) : 0;
+  return {
+    qty,
+    base: fromCents(base),
+    old: fromCents(old),
+    discount: 0,
+    extras: 0,
+    coupon,
+    couponOff: fromCents(couponOff),
+    total: fromCents(base - couponOff),
+    hasOff: false,
+    hasGift: false,
+    picked: [],
+    count: qty,
+    shipping: 0,
+  };
+}
 
 function money(value) {
   return value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });

@@ -3,89 +3,140 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Checkout – Luma Beleza</title>
+  <title>Finalizar compra – Luma Beleza</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Great+Vibes&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=6">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css?v=8">
 </head>
-<body class="checkout-page">
-  <header class="vega-head">
-    <a class="logo" href="index.html" aria-label="Luma Beleza">
-      <span class="script" style="font-size:28px">luma</span>
-      <span class="word" style="font-size:16px">beleza</span>
+<body class="co ref">
+  <div class="ref-top">
+    <div class="ticker">
+      <span>+10% OFF COM CUPOM "BEMVINDO10"</span>
+      <span>FRETE GRÁTIS PARA TODOS OS PRODUTOS</span>
+      <span>+ 538 AVALIAÇÕES · NOTA 4,9</span>
+      <span>+10% OFF COM CUPOM "BEMVINDO10"</span>
+      <span>FRETE GRÁTIS PARA TODOS OS PRODUTOS</span>
+      <span>+ 538 AVALIAÇÕES · NOTA 4,9</span>
+    </div>
+  </div>
+  <header class="co-bar">
+    <a class="co-back" href="index.html" aria-label="Voltar à loja">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </a>
-    <div class="ck-secure">Compra 100% segura</div>
+    <a class="logo" href="index.html" aria-label="Luma Beleza"><span class="script">luma</span><span class="word">beleza</span></a>
+    <span class="co-lock" aria-hidden="true">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="5" y="11" width="14" height="9" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M8 11V8a4 4 0 018 0v3" stroke="currentColor" stroke-width="1.7"/></svg>
+    </span>
   </header>
 
-  <main class="vega">
-    <img class="vega-banner" src="images/checkout/basecheckout.jpg?v=4" alt="Entrega garantida em até 7 dias úteis. Promoção exclusiva apenas hoje." width="960" height="560" fetchpriority="high" decoding="async">
+  <main class="co-main">
+    <ol class="ck-steps" aria-label="Etapas do checkout">
+      <li class="on"><button type="button" data-goto="1"><span>1</span>Informações pessoais</button></li>
+      <li><button type="button" data-goto="2"><span>2</span>Entrega</button></li>
+      <li><button type="button" data-goto="3"><span>3</span>Pagamento</button></li>
+    </ol>
 
-    <section class="ck-proof" id="ck-proof" aria-label="Avaliações"></section>
+    <section class="ref-card">
+      <button class="summary-toggle" type="button" id="toggle-summary" aria-expanded="true"><span>Resumo (<span id="sum-count">1</span>)</span></button>
+      <div class="summary-body" id="summary"></div>
+      <div class="ref-coupon" id="coupon-block">
+        <p>Tem um cupom?</p>
+        <div class="coupon-row">
+          <input id="coupon" name="coupon" placeholder="Código do cupom" autocomplete="off">
+          <button class="ref-add" type="button" id="apply-coupon">Aplicar</button>
+        </div>
+        <p class="coupon-suggest">Sugestão: <button type="button" class="coupon-chip" id="use-welcome">BEMVINDO10</button></p>
+        <p class="error" id="coupon-msg"></p>
+      </div>
+    </section>
 
-    <form id="checkout">
-      <section class="vega-box" id="summary"></section>
-
-      <section class="vega-box">
-        <h2><span class="vstep">1</span> Identificação</h2>
-        <div class="field"><label for="nome">Nome completo</label><input id="nome" name="nome" autocomplete="name" placeholder="Seu nome e sobrenome" required></div>
-        <div class="field"><label for="email">E-mail</label><input id="email" name="email" type="email" autocomplete="email" placeholder="seu@email.com" required></div>
-        <div class="field"><label for="telefone">Celular</label><input id="telefone" name="telefone" inputmode="tel" autocomplete="tel" placeholder="(00) 00000-0000" required></div>
-        <div class="field"><label for="cpf">CPF</label><input id="cpf" name="cpf" inputmode="numeric" placeholder="000.000.000-00" required></div>
+    <form id="checkout" novalidate>
+      <section class="step-panel" data-step="1">
+        <h2>Identificação</h2>
+        <p class="ref-lead">Usamos seu e-mail para enviar a atualização deste pedido.</p>
+        <div class="field"><label for="nome">Nome completo</label><input id="nome" name="nome" autocomplete="name" placeholder="ex.: Maria Silva" required></div>
+        <div class="field"><label for="email">E-mail</label><input id="email" name="email" type="email" autocomplete="email" placeholder="ex.: maria@email.com" required></div>
+        <div class="field"><label for="cpf">CPF</label><input id="cpf" name="cpf" inputmode="numeric" autocomplete="off" placeholder="000.000.000-00" required></div>
+        <div class="field"><label for="telefone">Celular / WhatsApp</label><input id="telefone" name="telefone" inputmode="tel" autocomplete="tel" placeholder="(00) 00000-0000" required></div>
         <p class="error" id="err-id"></p>
       </section>
 
-      <section class="vega-box" id="step-entrega">
-        <h2><span class="vstep">2</span> Entrega</h2>
-        <div class="cep-row">
-          <div class="field"><label for="cep">CEP</label><input id="cep" name="cep" inputmode="numeric" autocomplete="postal-code" placeholder="00000-000" required></div>
-          <button class="cta" type="button" id="buscar-cep">BUSCAR</button>
-        </div>
-        <a class="cep-help" href="https://buscacepinter.correios.com.br/app/endereco/index.php" target="_blank" rel="noopener">Não sei meu CEP</a>
+      <section class="step-panel" data-step="2" hidden>
+        <h2>Entrega</h2>
+        <p class="ref-lead">Cadastre o endereço de entrega.</p>
+        <div class="field"><label for="cep">CEP</label><input id="cep" name="cep" inputmode="numeric" autocomplete="postal-code" placeholder="00000-000" required></div>
+        <button class="cep-help" type="button" id="buscar-cep">Não sei meu CEP</button>
         <div class="field"><label for="rua">Endereço</label><input id="rua" name="rua" autocomplete="address-line1" required></div>
         <div class="grid-2">
           <div class="field"><label for="numero">Número</label><input id="numero" name="numero" required></div>
-          <div class="field"><label for="complemento">Complemento</label><input id="complemento" name="complemento" placeholder="Apto, bloco"></div>
+          <div class="field"><label for="bairro">Bairro</label><input id="bairro" name="bairro" required></div>
         </div>
-        <div class="field"><label for="bairro">Bairro</label><input id="bairro" name="bairro" required></div>
+        <div class="field"><label for="complemento">Complemento <small>(opcional)</small></label><input id="complemento" name="complemento"></div>
         <div class="grid-2">
           <div class="field"><label for="cidade">Cidade</label><input id="cidade" name="cidade" required></div>
-          <div class="field"><label for="uf">Estado</label><input id="uf" name="uf" maxlength="2" placeholder="UF" required></div>
+          <div class="field"><label for="uf">Estado</label><input id="uf" name="uf" maxlength="2" required></div>
         </div>
-        <div class="ship-row">
-          <span class="vega-radio" aria-hidden="true"></span>
-          <img class="correios" src="images/ui/correios.svg" alt="Correios">
-          <div class="grow">
-            <strong>Frete grátis</strong>
-            <span class="muted">Correios · até 7 dias úteis</span>
-          </div>
-          <strong>R$ 0,00</strong>
-        </div>
+        <div class="field"><label for="destinatario">Destinatário</label><input id="destinatario" name="destinatario" autocomplete="name"></div>
         <p class="error" id="err-addr"></p>
+        <p class="ref-note">Confira o endereço antes de seguir. O frete é grátis e a entrega estimada é de até 7 dias úteis após a confirmação do pagamento.</p>
+        <label class="ship-card">
+          <input type="radio" name="ship" checked>
+          <span><strong>Frete grátis</strong><small>Até 7 dias úteis após a confirmação do pagamento</small></span>
+          <b>Grátis</b>
+        </label>
       </section>
 
-      <section class="vega-box" id="step-pay">
-        <h2><span class="vstep">3</span> Pagamento</h2>
-        <div class="pay-opt active">
-          <span class="vega-radio" aria-hidden="true"></span>
-          <img class="pay-ico" src="images/ui/pix.svg" alt="">
-          <span class="pay-copy"><strong>PIX</strong><small>Aprovação imediata</small></span>
-          <span class="pay-tag">Na hora</span>
+      <section class="step-panel" data-step="3" hidden>
+        <h2>Pagamento</h2>
+        <p class="ref-lead">Escolha uma forma de pagamento.</p>
+        <div class="pix-box">
+          <label class="pay-choice">
+            <input type="radio" name="pay" value="pix" checked>
+            <span><strong>Pix</strong></span>
+            <em>Aprovação imediata</em>
+          </label>
+          <div id="pix-panel">
+            <p>A confirmação chega quando o banco avisa o pagamento. O código aparece na tela seguinte, como referência deste pedido.</p>
+            <p class="pix-alert"><strong>Importante:</strong> nada é cobrado nesta loja antes da conta de recebimento devolver a cobrança.</p>
+            <p class="pix-value-line">Valor no Pix: <b id="pix-amount"></b></p>
+            <p class="error" id="pix-err"></p>
+          </div>
         </div>
-        <button class="cta block" type="submit" id="finish">FINALIZAR COMPRA</button>
+        <p class="notice">Registrar o pedido não gera cobrança e não confirma o pagamento.</p>
       </section>
+      <button class="ref-go" type="button" id="finish">Ir para entrega</button>
     </form>
 
-    <div class="vega-brands">
+    <section class="trust">
+      <article>
+        <span class="trust-ico" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z"/><path d="M9 12l2 2 4-4"/></svg></span>
+        <div>
+          <h3>Pagamento seguro</h3>
+          <p>Os dados do pedido ficam só neste navegador. O Pix é confirmado pelo banco.</p>
+        </div>
+      </article>
+      <article>
+        <span class="trust-ico" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 7h11v8H3zM14 10h4l3 3v2h-7z"/><circle cx="7" cy="18" r="1.6"/><circle cx="18" cy="18" r="1.6"/></svg></span>
+        <div>
+          <h3>Entrega garantida</h3>
+          <p>Frete grátis para todo o Brasil, em até 7 dias úteis após a confirmação do pagamento. O rastreio segue por e-mail depois do despacho.</p>
+        </div>
+      </article>
+      <article>
+        <span class="trust-ico" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20 12a8 8 0 11-2.3-5.7"/><path d="M20 4v5h-5"/><path d="M8 12l2.2 2.2L16 9"/></svg></span>
+        <div>
+          <h3>Trocas e devoluções</h3>
+          <p>7 dias para testar e solicitar a troca, e até 30 dias de garantia, contados do recebimento. Escreva para contato@lumabeleza.com.</p>
+        </div>
+      </article>
+    </section>
+    <p class="pays-label">Formas de pagamento</p>
+    <div class="cart-pays">
       <img src="images/ui/pix.svg" alt="Pix">
-      <img src="images/ui/mastercard.svg" alt="Mastercard">
-      <img src="images/ui/visa.svg" alt="Visa">
-      <img src="images/ui/elo.svg" alt="Elo">
-      <img src="images/ui/amex.svg" alt="American Express">
-      <img src="images/ui/diners.svg" alt="Diners">
     </div>
-    <p class="vega-safe">Ambiente seguro · Frete grátis para todo o Brasil</p>
+    <p class="ref-legal">Luma Beleza · contato@lumabeleza.com</p>
   </main>
-  <script src="js/store.js?v=4"></script>
-  <script src="js/checkout.js?v=6"></script>
+  <script src="js/store.js?v=5"></script>
+  <script src="js/checkout.js?v=7"></script>
 </body>
 </html>

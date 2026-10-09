@@ -21,7 +21,6 @@ const REVIEWS = [
   { name: "Juliana Santos", text: "Comprei porque vi os comentários. Chegou com 8 dias, veio a base na caixa junto com o refil, o aplicador e o rímel. Paguei no PIX e o atendimento no WhatsApp foi imediato.", stars: 5 },
 ];
 
-const COLORS = ["#c45c8a", "#7b5ea7", "#3d8b7a", "#bf5d30", "#3b6ea5", "#b08968", "#8a5a44"];
 const state = { tone: null, qty: 1, slide: 0, shown: 6, tonePicked: false, pendingBuy: false };
 
 function slides() {
@@ -30,42 +29,40 @@ function slides() {
   return [GALLERY[0], tone.image, ...GALLERY.slice(1)];
 }
 
-let thumbKey = GALLERY.join("|");
+function shortTone(label) {
+  return label.replace(/^Bege\s+/i, "");
+}
 
 function renderGallery() {
   const list = slides();
   const stage = document.querySelector("#stage-img");
-  const next = list[state.slide];
+  const next = list[state.slide] || list[0];
   if ((stage.getAttribute("src") || "").split("?")[0] !== next) stage.src = next + ASSET;
   stage.alt = STORE.product;
-  const thumbs = document.querySelector("#thumbs");
-  const key = list.join("|");
-  if (thumbKey !== key) {
-    thumbKey = key;
-    thumbs.innerHTML = list.map((src, index) => `
-      <button type="button" class="${index === state.slide ? "active" : ""}" data-slide="${index}">
-        <img src="${(THUMBS[src] || src) + ASSET}" alt="Foto ${index + 1} do produto" width="128" height="171" decoding="async">
-      </button>
-    `).join("");
-  }
-  thumbs.querySelectorAll("button").forEach((btn, index) => {
-    btn.classList.toggle("active", index === state.slide);
-  });
+  const dots = document.querySelector("#gallery-dots");
+  dots.innerHTML = list.map((_, index) => `
+    <button type="button" class="${index === state.slide ? "active" : ""}" data-slide="${index}" aria-label="Foto ${index + 1}"></button>
+  `).join("");
+}
+
+function barsHtml() {
+  const counts = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 };
+  REVIEWS.forEach((review) => { counts[review.stars] = (counts[review.stars] || 0) + 1; });
+  return [5, 4, 3, 2, 1].map((star) => `
+    <div class="bar-row"><span>${star} ★</span><i><b style="width:${Math.round((counts[star] / REVIEWS.length) * 100)}%"></b></i><em>${counts[star]}</em></div>
+  `).join("");
 }
 
 function renderReviews() {
-  const box = document.querySelector("#review-list");
-  box.innerHTML = REVIEWS.slice(0, state.shown).map((review) => `
-    <article class="review">
-      <div class="review-head">
-        <div class="avatar" style="background:${COLORS[review.name.charCodeAt(0) % COLORS.length]}">${review.name[0]}</div>
-        <div>
-          <h3>${review.name} <span class="verified" title="Compra verificada">✓</span></h3>
-          <div class="stars">${"★".repeat(review.stars)}${"☆".repeat(5 - review.stars)}</div>
-        </div>
-      </div>
+  document.querySelector("#review-list").innerHTML = REVIEWS.slice(0, state.shown).map((review) => `
+    <article class="review-card">
+      <header>
+        <strong>${review.name}</strong>
+        <span class="verified">Compra verificada</span>
+      </header>
+      <div class="stars">${"★".repeat(review.stars)}${"☆".repeat(5 - review.stars)}</div>
       <p>${review.text}</p>
-      ${review.photo ? `<img class="review-photo" src="${review.photo}" alt="Foto enviada por ${review.name}" loading="lazy" decoding="async">` : ""}
+      ${review.photo ? `<img src="${review.photo}" alt="Foto enviada por ${review.name}" loading="lazy" decoding="async">` : ""}
     </article>
   `).join("");
   document.querySelector("#more-reviews").style.display = state.shown >= REVIEWS.length ? "none" : "block";
@@ -73,13 +70,54 @@ function renderReviews() {
 
 function focusTones() {
   if (document.activeElement) document.activeElement.blur();
-  const box = document.querySelector("#tones");
-  box.classList.add("need-pick");
+  document.querySelector("#tones").classList.add("need-pick");
   document.querySelector("#tone-hint").textContent = "Escolha um tom para continuar a compra.";
   const label = document.querySelector("#tom-label");
   const top = label.getBoundingClientRect().top + window.scrollY - 78;
   window.scrollTo({ top: Math.max(0, top), behavior: "auto" });
   toast("Escolha o tom da base");
+}
+
+function syncCart() {
+  const tone = TONES.find((item) => item.id === state.tone);
+  const cart = readCart();
+  cart.toneId = state.tonePicked ? state.tone : "";
+  cart.tone = tone ? tone.label : "";
+  cart.qty = state.qty;
+  cart.image = tone ? tone.image : GALLERY[0];
+  saveCart(cart);
+  const count = document.querySelector(".cart-count");
+  const numbers = quote(cart);
+  count.dataset.n = String(numbers.count);
+  count.textContent = numbers.count ? String(numbers.count) : "";
+  renderCart(cart, numbers);
+}
+
+function renderCart(cart, numbers) {
+  const body = document.querySelector("#cart-body");
+  const dock = document.querySelector("#cart-dock");
+  if (!cart.toneId) {
+    body.innerHTML = `<p>Seu carrinho está vazio. Escolha o tom e toque em comprar agora.</p>`;
+    dock.hidden = true;
+    return;
+  }
+  body.innerHTML = `
+    <div class="co-item">
+      <img src="${cart.image}${ASSET}" alt="" width="72" height="90">
+      <div><strong>${STORE.product}</strong><span>${cart.tone} · ${cart.qty} un.</span></div>
+      <div class="co-item-price"><b>${money(numbers.total)}</b></div>
+    </div>
+  `;
+  dock.hidden = false;
+  dock.innerHTML = `
+    <div class="dock-row"><span>Frete</span><b>Grátis</b></div>
+    <div class="dock-row grand"><span>Total</span><b>${money(numbers.total)}</b></div>
+    <button class="cart-buy" type="button" data-buy>Comprar agora</button>
+  `;
+  dock.querySelector("[data-buy]").onclick = () => {
+    document.querySelector("#cart").classList.remove("open");
+    goCheckout();
+  };
 }
 
 function goCheckout() {
@@ -88,6 +126,7 @@ function goCheckout() {
     focusTones();
     return;
   }
+  syncCart();
   const tone = TONES.find((item) => item.id === state.tone);
   saveOrder({
     product: STORE.product,
@@ -107,7 +146,10 @@ function bindChrome() {
   const cart = document.querySelector("#cart");
   document.querySelector("#open-menu").onclick = () => menu.classList.add("open");
   document.querySelector("#open-search").onclick = () => search.classList.add("open");
-  document.querySelector("#open-cart").onclick = () => cart.classList.add("open");
+  document.querySelector("#open-cart").onclick = () => {
+    syncCart();
+    cart.classList.add("open");
+  };
   document.querySelectorAll("[data-close]").forEach((btn) => {
     btn.onclick = () => btn.closest(".drawer, .modal").classList.remove("open");
   });
@@ -121,43 +163,92 @@ function bindChrome() {
     const q = document.querySelector("#q").value.trim().toLowerCase();
     search.classList.remove("open");
     if (!q || STORE.product.toLowerCase().includes(q) || "base refil pincel rimel".includes(q)) {
-      document.querySelector(".product").scrollIntoView();
+      document.querySelector("#comprar").scrollIntoView();
       toast("Mostrando o kit da base");
       return;
     }
     toast("Nenhum outro produto encontrado");
   };
   document.querySelector("#wa").onclick = () => openWhatsApp();
-  document.querySelectorAll(".acc").forEach((btn) => {
-    btn.onclick = () => btn.nextElementSibling.classList.toggle("open");
-  });
-  document.querySelector("#news").onsubmit = (event) => {
-    event.preventDefault();
-    event.target.reset();
-    toast("E-mail cadastrado");
-  };
   document.querySelector("#review-form").onsubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.target);
-    REVIEWS.unshift({
-      name: data.get("name"),
-      text: data.get("text"),
-      stars: Number(data.get("stars")),
-    });
+    REVIEWS.unshift({ name: data.get("name"), text: data.get("text"), stars: Number(data.get("stars")) });
     state.shown += 1;
     renderReviews();
+    document.querySelector("#review-bars").innerHTML = barsHtml();
+    document.querySelector("#pop-bars").innerHTML = barsHtml();
     document.querySelector("#review-modal").classList.remove("open");
     event.target.reset();
     toast("Avaliação publicada");
+  };
+  document.querySelector("#open-rating").onclick = () => {
+    document.querySelector("#rating-pop").hidden = false;
+  };
+  document.querySelector("#close-pop").onclick = () => {
+    document.querySelector("#rating-pop").hidden = true;
+  };
+  document.querySelector("#read-reviews").onclick = () => {
+    document.querySelector("#rating-pop").hidden = true;
+    document.querySelector("#avaliacoes").scrollIntoView();
+  };
+  document.querySelector("#open-shade").onclick = () => {
+    document.querySelector("#duvidas").scrollIntoView();
+  };
+  document.querySelector("#ship-form").onsubmit = async (event) => {
+    event.preventDefault();
+    const cep = onlyDigits(document.querySelector("#cep").value);
+    const box = document.querySelector("#ship-result");
+    box.hidden = false;
+    if (cep.length !== 8) {
+      box.textContent = "Informe um CEP com 8 números.";
+      return;
+    }
+    box.textContent = "Calculando...";
+    try {
+      const res = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+      const data = await res.json();
+      if (data.erro) {
+        box.textContent = "CEP não encontrado.";
+        return;
+      }
+      box.innerHTML = `<ul class="ship-option"><li><b class="ship-free">Frete grátis</b><span class="ship-when">${data.localidade}/${data.uf} · até 7 dias úteis</span></li></ul>`;
+    } catch {
+      box.textContent = "Não foi possível calcular agora. O frete continua grátis.";
+    }
+  };
+  document.querySelector("#cep").addEventListener("input", (event) => {
+    event.target.value = maskCep(event.target.value);
+  });
+  document.querySelector("#gallery-dots").onclick = (event) => {
+    const btn = event.target.closest("[data-slide]");
+    if (!btn) return;
+    state.slide = Number(btn.dataset.slide);
+    renderGallery();
+  };
+  document.querySelector("#prev-photo").onclick = () => {
+    const total = slides().length;
+    state.slide = (state.slide - 1 + total) % total;
+    renderGallery();
+  };
+  document.querySelector("#next-photo").onclick = () => {
+    state.slide = (state.slide + 1) % slides().length;
+    renderGallery();
   };
 }
 
 document.querySelector("#old-price").textContent = money(STORE.oldPrice);
 document.querySelector("#price").textContent = money(STORE.price);
+document.querySelector("#bar-old").textContent = money(STORE.oldPrice);
+document.querySelector("#bar-now").textContent = money(STORE.price);
+document.querySelector("#review-bars").innerHTML = barsHtml();
+document.querySelector("#pop-bars").innerHTML = barsHtml();
 document.querySelector("#tones").innerHTML = TONES.map((tone) => `
-  <button type="button" class="tone" data-tone="${tone.id}">${tone.label}</button>
+  <button type="button" class="tone" data-tone="${tone.id}">
+    <img src="${(THUMBS[tone.image] || tone.image) + ASSET}" alt="">
+    <strong>${shortTone(tone.label)}</strong>
+  </button>
 `).join("");
-document.querySelector("#extra-tones").innerHTML = TONES.map((tone) => `<li>${tone.label} — ${tone.hint}</li>`).join("");
 
 document.querySelector("#tones").onclick = (event) => {
   const btn = event.target.closest("[data-tone]");
@@ -165,33 +256,32 @@ document.querySelector("#tones").onclick = (event) => {
   state.tone = btn.dataset.tone;
   state.tonePicked = true;
   state.slide = 1;
+  const tone = TONES.find((item) => item.id === state.tone);
   document.querySelector("#tones").classList.remove("need-pick");
-  document.querySelector("#tone-hint").textContent = "Tom selecionado.";
+  document.querySelector("#tone-hint").textContent = tone.hint;
   document.querySelectorAll(".tone").forEach((el) => el.classList.toggle("active", el.dataset.tone === state.tone));
   renderGallery();
+  syncCart();
   if (state.pendingBuy) {
     state.pendingBuy = false;
     goCheckout();
   }
 };
-document.querySelector("#thumbs").onclick = (event) => {
-  const btn = event.target.closest("[data-slide]");
-  if (!btn) return;
-  state.slide = Number(btn.dataset.slide);
-  renderGallery();
-};
 document.querySelector("#qty").value = state.qty;
 document.querySelector("#minus").onclick = () => {
   state.qty = Math.max(1, state.qty - 1);
   document.querySelector("#qty").value = state.qty;
+  if (state.tonePicked) syncCart();
 };
 document.querySelector("#plus").onclick = () => {
   state.qty = Math.min(5, state.qty + 1);
   document.querySelector("#qty").value = state.qty;
+  if (state.tonePicked) syncCart();
 };
 document.querySelector("#qty").onchange = (event) => {
   state.qty = Math.min(5, Math.max(1, Number(event.target.value) || 1));
   event.target.value = state.qty;
+  if (state.tonePicked) syncCart();
 };
 document.querySelectorAll("[data-buy]").forEach((btn) => {
   btn.onclick = () => {
@@ -205,6 +295,18 @@ document.querySelector("#more-reviews").onclick = () => {
   renderReviews();
 };
 
+const savedCart = readCart();
+if (savedCart.toneId && TONES.some((item) => item.id === savedCart.toneId)) {
+  state.tone = savedCart.toneId;
+  state.tonePicked = true;
+  state.qty = savedCart.qty;
+  state.slide = 1;
+  document.querySelector("#qty").value = state.qty;
+  document.querySelector("#tone-hint").textContent = TONES.find((item) => item.id === state.tone).hint;
+  document.querySelectorAll(".tone").forEach((el) => el.classList.toggle("active", el.dataset.tone === state.tone));
+}
+
 renderGallery();
 renderReviews();
 bindChrome();
+syncCart();
