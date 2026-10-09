@@ -15,6 +15,7 @@ const types = {
   ".svg": "image/svg+xml",
   ".webp": "image/webp",
   ".ico": "image/x-icon",
+  ".mp4": "video/mp4",
   ".txt": "text/plain; charset=utf-8",
 };
 
@@ -35,9 +36,35 @@ const server = http.createServer((req, res) => {
       return;
     }
     const ext = path.extname(file).toLowerCase();
+    const range = req.headers.range;
+    if (ext === ".mp4" && range) {
+      const size = stat.size;
+      const match = /^bytes=(\d*)-(\d*)$/.exec(range);
+      if (!match) {
+        res.writeHead(416, { "Content-Range": `bytes */${size}` });
+        res.end();
+        return;
+      }
+      let start = match[1] ? Number(match[1]) : 0;
+      let end = match[2] ? Number(match[2]) : size - 1;
+      if (start > end || end >= size) {
+        res.writeHead(416, { "Content-Range": `bytes */${size}` });
+        res.end();
+        return;
+      }
+      res.writeHead(206, {
+        "Content-Type": "video/mp4",
+        "Content-Range": `bytes ${start}-${end}/${size}`,
+        "Accept-Ranges": "bytes",
+        "Content-Length": end - start + 1,
+        "Cache-Control": "public, max-age=2592000",
+      });
+      fs.createReadStream(file, { start, end }).pipe(res);
+      return;
+    }
     const image = [".jpg", ".jpeg", ".png", ".webp", ".ico"].includes(ext);
     const text = [".html", ".css", ".js", ".svg", ".txt"].includes(ext);
-    const cache = image || ext === ".css" || ext === ".js" || ext === ".svg"
+    const cache = image || ext === ".mp4" || ext === ".css" || ext === ".js" || ext === ".svg"
       ? "public, max-age=2592000"
       : "no-cache";
     const etag = `W/"${stat.size}-${Math.round(stat.mtimeMs)}"`;

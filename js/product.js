@@ -202,6 +202,18 @@ function bindChrome() {
   document.querySelector("#open-shade").onclick = () => {
     document.querySelector("#duvidas").scrollIntoView();
   };
+  document.querySelectorAll("#ugc-row video").forEach((video) => {
+    video.play().catch(() => {});
+    video.onclick = () => {
+      document.querySelectorAll("#ugc-row video").forEach((other) => {
+        if (other !== video) {
+          other.muted = true;
+        }
+      });
+      video.muted = !video.muted;
+      video.play();
+    };
+  });
   document.querySelector("#news").onsubmit = (event) => {
     event.preventDefault();
     event.target.reset();

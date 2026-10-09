@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preload" as="image" href="images/carrossel/01.jpg?v=4" fetchpriority="high">
-  <link rel="stylesheet" href="css/style.css?v=9">
+  <link rel="stylesheet" href="css/style.css?v=10">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&display=swap">
 </head>
 <body>
@@ -86,16 +86,15 @@
     </section>
 
     <section class="ugc">
-      <h2>Veja quem já comprou</h2>
-      <p>Fotos reais de quem recebeu o kit</p>
-      <div class="ugc-row">
-        <img src="images/avaliacoes/01.jpeg" alt="Foto de cliente" width="180" height="240" loading="lazy">
-        <img src="images/avaliacoes/02.jpeg" alt="Foto de cliente" width="180" height="240" loading="lazy">
-        <img src="images/avaliacoes/03.jpeg" alt="Foto de cliente" width="180" height="240" loading="lazy">
-        <img src="images/avaliacoes/05.jpeg" alt="Foto de cliente" width="180" height="240" loading="lazy">
-        <img src="images/avaliacoes/06.jpeg" alt="Foto de cliente" width="180" height="240" loading="lazy">
+      <h2>Veja quem já testou</h2>
+      <p>Vídeos reais de quem usou a base</p>
+      <div class="ugc-row" id="ugc-row">
+        <video src="videos/01.mp4" poster="videos/01.jpg" playsinline muted loop preload="metadata"></video>
+        <video src="videos/02.mp4" poster="videos/02.jpg" playsinline muted loop preload="metadata"></video>
+        <video src="videos/03.mp4" poster="videos/03.jpg" playsinline muted loop preload="metadata"></video>
       </div>
     </section>
+    <div class="mid-cta"><button class="cta" type="button" data-buy>Adicionar carrinho</button></div>
 
     <section class="landing" id="descricao">
       <img src="images/landing/02.jpg?v=4" alt="Kit base com refil, pincel mágico e rímel" width="720" height="1456" loading="lazy">
@@ -225,6 +224,6 @@
   </div>
   <div class="toast" role="status"></div>
   <script src="js/store.js?v=5"></script>
-  <script src="js/product.js?v=5"></script>
+  <script src="js/product.js?v=6"></script>
 </body>
 </html>

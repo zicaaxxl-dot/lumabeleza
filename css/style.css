@@ -229,10 +229,11 @@ h1, h2, h3 { font-weight: 700; }
 .ugc { padding: 18px 0 8px; }
 .ugc h2, .reviews h2, .faq h2 { margin: 0 16px 4px; font-size: 22px; text-align: center; }
 .ugc p { margin: 0 16px 12px; text-align: center; color: var(--muted); font-size: 14px; }
-.ugc-row { display: flex; gap: 10px; overflow-x: auto; padding: 0 16px 8px; scrollbar-width: none; }
-.ugc-row img { width: 148px; height: 210px; object-fit: cover; border-radius: 16px; flex: 0 0 148px; }
-.landing { display: flex; flex-direction: column; align-items: center; }
-.landing img { width: min(100%, 480px); height: auto; }
+.ugc-row { display: flex; gap: 10px; overflow-x: auto; padding: 0 16px 8px; scroll-snap-type: x mandatory; scrollbar-width: none; }
+.ugc-row video, .ugc-row img { width: 168px; height: 280px; object-fit: cover; border-radius: 18px; flex: 0 0 168px; background: #111; scroll-snap-align: start; }
+.mid-cta { padding: 8px 16px 18px; }
+.landing { display: flex; flex-direction: column; align-items: center; background: #fff; }
+.landing img { width: min(100%, 720px); height: auto; }
 
 .reviews { padding: 24px 16px 8px; }
 .review-score b { font-size: 40px; }
